@@ -14,14 +14,14 @@ using OfficeOpenXml;
 
 namespace NlpEditor.Utils
 {
-    public class NlpFromFileLoader : INlpLoader
+    public class NlpFileFromFileLoader : INlpFileLoader
     {
         private Symptoms _symptoms { get; set; }
         private NlpConfiguration _config { get; set; }
-        public NlpFromFileLoader(NlpConfiguration config)
+        public NlpFileFromFileLoader(IOptions<NlpConfiguration> config)
         {
             _symptoms = new Symptoms();
-            _config = config;
+            _config = config.Value;
         }
 
         public void Load(string fileName)
@@ -65,7 +65,7 @@ namespace NlpEditor.Utils
                         {
                             Name = name == null ? null : name.ToString(),
                             Area = area,
-                            Code = codeSystem != null && code != null ? new Coding(codeSystem.ToString(), code.ToString()) : null,
+                            Code = codeSystem != null && code != null ? CodesConverter.ShortToCoding(codeSystem.ToString() + code.ToString()) : null,
                             Synonyms = synonyms
                         };
                         if (valuecode != null && valuesystem != null)
@@ -98,8 +98,8 @@ namespace NlpEditor.Utils
         }
     }
 
-    public interface INlpLoader
+    public interface INlpFileLoader
     {
-        public void Load(string fileName);
+        public void Load(string sourcePath);
     }
 }

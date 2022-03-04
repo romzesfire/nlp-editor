@@ -15,7 +15,7 @@ namespace NlpEditor.ViewModel
     public class MainWindowViewModel : INotifyPropertyChanged
     {
         private ObservableCollection<SymptomToSelectViewModel> _symptomsToSelect { get; set; }
-        private SelectedSymptom _selectedSymptom { get; set; }
+        private SymptomViewModel SymptomViewModel { get; set; }
         public ObservableCollection<SymptomToSelectViewModel> SymptomsToSelect
         {
             get
@@ -28,7 +28,7 @@ namespace NlpEditor.ViewModel
                 OnPropertyChanged();
             }
         }
-        public SelectedSymptom SelectedSymptom
+        public SymptomViewModel SymptomViewModel
         {
             get
             {
@@ -101,7 +101,9 @@ namespace NlpEditor.ViewModel
         public SymptomToSelectViewModel(Symptom symptom)
         {
             Code = CodesConverter.CodingToShort(symptom.Code);
-            Value = CodesConverter.CodingToShort(symptom.Value);
+            if(symptom.Value != null)
+                Value = CodesConverter.CodingToShort(symptom.Value);
+
             Name = symptom.Name;
         }
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -112,7 +114,7 @@ namespace NlpEditor.ViewModel
         }
     }
 
-    public class SelectedSymptom : INotifyPropertyChanged
+    public class SymptomViewModel : INotifyPropertyChanged
     {
         private string _code;
         private string _value;
@@ -181,11 +183,14 @@ namespace NlpEditor.ViewModel
         }
         public ObservableCollection<Status> Statuses { get; set; }
         public ObservableCollection<Gender> Genders { get; set; }
-        public SelectedSymptom(Symptom symptom)
+        public ObservableCollection<SynonymViewModel> Synonyms { get; set; }
+        public SymptomViewModel(Symptom symptom)
         {
             Code = CodesConverter.CodingToShort(symptom.Code);
             Value = CodesConverter.CodingToShort(symptom.Value);
             Name = symptom.Name;
+            Synonyms = new ObservableCollection<SynonymViewModel>(
+                symptom.Synonyms.Select(s => new SynonymViewModel(s)));
             SetStatuses();
             SetGenders();
         }
@@ -209,6 +214,34 @@ namespace NlpEditor.ViewModel
                 Statuses.Add((Status)((FieldInfo)status).GetValue(Status.Active));
             }
         }
+        public event PropertyChangedEventHandler? PropertyChanged;
+        public void OnPropertyChanged([CallerMemberName] string prop = "")
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(prop));
+        }
+    }
+
+    public class SynonymViewModel : INotifyPropertyChanged
+    {
+        private string _name;
+        public string Name
+        {
+            get
+            {
+                return _name;
+            }
+            set
+            {
+                _name = value;
+                OnPropertyChanged();
+            }
+        }
+        public SynonymViewModel(Synonym synonym)
+        {
+            Name = synonym.Name;
+        }
+
         public event PropertyChangedEventHandler? PropertyChanged;
         public void OnPropertyChanged([CallerMemberName] string prop = "")
         {
