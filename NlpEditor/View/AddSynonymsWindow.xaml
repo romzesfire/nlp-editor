@@ -1,0 +1,29 @@
+﻿<Window x:Class="NlpEditor.View.AddSynonymsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:NlpEditor"
+        mc:Ignorable="d"
+        Title="AddSynonyms" Height="450" Width="800">
+    <Grid>
+        <ScrollViewer Margin="10,36,10,10" Name="ScrollViewer1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" CanContentScroll="True">
+            <ItemsControl ItemsSource="{Binding Synonyms}" x:Name="tStack"  Background="#FFCECECE" >
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel CanVerticallyScroll="True" Orientation="Vertical"  CanHorizontallyScroll="True"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <TextBox Text="{Binding Name}"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+        <Button x:Name="ClipboardButton" Click="ClipboardButton_OnClick" Content="Вставить из буфера обмена" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="164"/>
+        <Button x:Name="OkButton" Click="OkButton_OnClick" Content="OK" HorizontalAlignment="Left" Margin="753,10,0,0" VerticalAlignment="Top" Width="37"/>
+
+
+    </Grid>
+</Window>

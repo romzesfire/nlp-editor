@@ -7,16 +7,20 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using NlpEditor.DI;
 using NlpEditor.Model;
+using NlpEditor.Source;
 using NlpEditor.Utils;
 
 namespace NlpEditor.ViewModel
 {
     public class MainWindowViewModel : INotifyPropertyChanged
     {
-        private ObservableCollection<SymptomToSelectViewModel> _symptomsToSelect { get; set; }
-        private SymptomViewModel SymptomViewModel { get; set; }
-        public ObservableCollection<SymptomToSelectViewModel> SymptomsToSelect
+        private Dictionary<string, ObservableCollection<SymptomViewModel>> _symptomList;
+        private ObservableCollection<SymptomViewModel> _symptomsToSelect;
+        private SymptomViewModel _selectedSymptom;
+        public ObservableCollection<SymptomViewModel> SymptomsToSelect
         {
             get
             {
@@ -28,7 +32,7 @@ namespace NlpEditor.ViewModel
                 OnPropertyChanged();
             }
         }
-        public SymptomViewModel SymptomViewModel
+        public SymptomViewModel SelectedSymptom
         {
             get
             {
@@ -41,205 +45,34 @@ namespace NlpEditor.ViewModel
             }
         }
 
-        public MainWindowViewModel()
+        public MainWindowViewModel(Symptoms symptoms)
         {
-            SymptomsToSelect = new ObservableCollection<SymptomToSelectViewModel>();
+            _symptomList = SetModelsMapping(symptoms);
         }
 
+        public Dictionary<string, ObservableCollection<SymptomViewModel>> SetModelsMapping(Symptoms symptoms)
+        {
+            var map = new Dictionary<string, ObservableCollection<SymptomViewModel>>();
 
-        public event PropertyChangedEventHandler? PropertyChanged;
-        public void OnPropertyChanged([CallerMemberName] string prop = "")
-        {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs(prop));
-        }
-    }
+            var areas = symptoms.Select(s => s.Area).Distinct();
+            foreach (var area in areas)
+                map.Add(area, new ObservableCollection<SymptomViewModel>( symptoms.Where(s=>s.Area == area).Select(s=> new SymptomViewModel(s))));
 
-    public class SymptomToSelectViewModel : INotifyPropertyChanged
-    {
-        private string _code;
-        private string _value;
-        private string _name;
-
-        public string Code
-        {
-            get
-            {
-                return _code;
-            }
-            set
-            {
-                _code = value;
-                OnPropertyChanged();
-            }
-        }
-        public string Value
-        {
-            get
-            {
-                return _value;
-            }
-            set
-            {
-                _value = value;
-                OnPropertyChanged();
-            }
-        }
-        public string Name
-        {
-            get
-            {
-                return _name;
-            }
-            set
-            {
-                _name = value;
-                OnPropertyChanged();
-            }
+            return map;
         }
 
-        public SymptomToSelectViewModel(Symptom symptom)
+        public void SetSymptomsByArea(string area)
         {
-            Code = CodesConverter.CodingToShort(symptom.Code);
-            if(symptom.Value != null)
-                Value = CodesConverter.CodingToShort(symptom.Value);
-
-            Name = symptom.Name;
+            SymptomsToSelect = _symptomList[area];
         }
-        public event PropertyChangedEventHandler? PropertyChanged;
-        public void OnPropertyChanged([CallerMemberName] string prop = "")
+        public void AddSymptomToArea(SymptomViewModel symptom, string area)
         {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs(prop));
+            _symptomList[area].Add(symptom);
+            symptom.SymptomReference.Area = area;
         }
-    }
-
-    public class SymptomViewModel : INotifyPropertyChanged
-    {
-        private string _code;
-        private string _value;
-        private string _name;
-        public Status _selectedStatus;
-        public Gender _selectedGender;
-        public string Code
+        public ObservableCollection<SymptomViewModel> GetSymptomsByArea(string area)
         {
-            get
-            {
-                return _code;
-            }
-            set
-            {
-                _code = value;
-                OnPropertyChanged();
-            }
-        }
-        public string Value
-        {
-            get
-            {
-                return _value;
-            }
-            set
-            {
-                _value = value;
-                OnPropertyChanged();
-            }
-        }
-        public string Name
-        {
-            get
-            {
-                return _name;
-            }
-            set
-            {
-                _name = value;
-                OnPropertyChanged();
-            }
-        }
-        public Status SelectedStatus
-        {
-            get
-            {
-                return _selectedStatus;
-            }
-            set
-            {
-                _selectedStatus = value;
-                OnPropertyChanged();
-            }
-        }
-        public Gender SelectedGender
-        {
-            get
-            {
-                return _selectedGender;
-            }
-            set
-            {
-                _selectedGender = value;
-                OnPropertyChanged();
-            }
-        }
-        public ObservableCollection<Status> Statuses { get; set; }
-        public ObservableCollection<Gender> Genders { get; set; }
-        public ObservableCollection<SynonymViewModel> Synonyms { get; set; }
-        public SymptomViewModel(Symptom symptom)
-        {
-            Code = CodesConverter.CodingToShort(symptom.Code);
-            Value = CodesConverter.CodingToShort(symptom.Value);
-            Name = symptom.Name;
-            Synonyms = new ObservableCollection<SynonymViewModel>(
-                symptom.Synonyms.Select(s => new SynonymViewModel(s)));
-            SetStatuses();
-            SetGenders();
-        }
-
-        private void SetGenders()
-        {
-            Genders = new ObservableCollection<Gender>();
-            Genders.Add(Gender.Female);
-            Genders.Add(Gender.Male);
-            Genders.Add(Gender.None);
-        }
-
-        private void SetStatuses()
-        {
-            var statusType = typeof(Status);
-            var members = statusType.GetMembers();
-            var statuses = members.Where(m => m is FieldInfo field && field.GetValue(Status.Active).GetType() == typeof(Status));
-            Statuses = new ObservableCollection<Status>();
-            foreach (var status in statuses)
-            {
-                Statuses.Add((Status)((FieldInfo)status).GetValue(Status.Active));
-            }
-        }
-        public event PropertyChangedEventHandler? PropertyChanged;
-        public void OnPropertyChanged([CallerMemberName] string prop = "")
-        {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs(prop));
-        }
-    }
-
-    public class SynonymViewModel : INotifyPropertyChanged
-    {
-        private string _name;
-        public string Name
-        {
-            get
-            {
-                return _name;
-            }
-            set
-            {
-                _name = value;
-                OnPropertyChanged();
-            }
-        }
-        public SynonymViewModel(Synonym synonym)
-        {
-            Name = synonym.Name;
+            return _symptomList[area];
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -249,4 +82,8 @@ namespace NlpEditor.ViewModel
                 PropertyChanged(this, new PropertyChangedEventArgs(prop));
         }
     }
+
+    
+
+    
 }

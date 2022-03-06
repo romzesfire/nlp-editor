@@ -57,7 +57,7 @@ namespace NlpEditor.Utils
                                 sheet.Cells[row + 1, col].Value == null)
                                 break;
                             var synonym = sheet.Cells[row, col].Value;
-                            if(synonym != null)
+                            if(synonym != null &&  synonyms.Find(x=>x.Name == synonym.ToString()) == null)
                                 synonyms.Add(new Synonym(synonym.ToString()));
                         }
 
@@ -83,11 +83,11 @@ namespace NlpEditor.Utils
                         }
                         if (status != null)
                         {
-                            symptom.SetGender(status.ToString());
+                            symptom.SetStatus(status.ToString());
                         }
                         else
                         {
-                            symptom.SetGender("");
+                            symptom.SetStatus("");
                         }
                         symptoms.AddSymptom(symptom);
                     }

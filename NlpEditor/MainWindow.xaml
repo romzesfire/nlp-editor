@@ -7,41 +7,43 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
         <TreeView x:Name="AreasTree" Margin="10,46,0,10" HorizontalAlignment="Left" Width="197">
             <TreeView.ItemTemplate>
                 <HierarchicalDataTemplate ItemsSource="{Binding Path=Nodes}">
-                    <Button x:Name="FormulationsSelect" BorderThickness="0" Click="SymptomsSelect_OnClick" Content="{Binding Name}" Tag="{Binding}" Background="White"/>
+                    <Button Height="30" Width="100" BorderBrush="Black" AllowDrop="True" Drop="SymptomsSelect_OnDrop" x:Name="FormulationsSelect" BorderThickness="1" Click="SymptomsSelect_OnClick" Content="{Binding Name}" Tag="{Binding}" Background="White"/>
                 </HierarchicalDataTemplate>
             </TreeView.ItemTemplate>
         </TreeView>
-        <ListBox Margin="210,46,0,10" ItemsSource="{Binding SymptomsToSelect}" HorizontalAlignment="Left" HorizontalContentAlignment="Stretch" Width="190">
+        <ListBox x:Name="SymptomsToSelectList" Margin="210,46,0,10" ItemsSource="{Binding SymptomsToSelect, Mode=TwoWay}" HorizontalContentAlignment="Left" HorizontalAlignment="Left" Width="199">
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <Grid MouseLeftButtonDown="Symptom_OnMouseLeftButtonDown" Height="109" >
+                    <Grid Name="SymptomGrid" MouseDown="SymptomGrid_OnMouseDown" Tag="{Binding}" Width="170" MaxWidth="{Binding ElementName=SymptomsToSelectList, Path=Width}" MouseLeftButtonDown="Symptom_OnMouseLeftButtonDown" Height="109" >
                         <Border Background="#FF737CE4" CornerRadius="5"></Border>
                         <TextBlock TextWrapping="Wrap" FontSize="10"  Text="Код" Margin="10,1,0,93" HorizontalAlignment="Left" />
                         <TextBlock TextWrapping="Wrap" FontSize="10"  Text="Значение" Margin="10,31,0,63" HorizontalAlignment="Left" />
-                        <TextBox Name="SymptomCode" TextWrapping="Wrap" Text="{Binding Code}" FontSize="10" VerticalContentAlignment="Center" Margin="10,16,10,79"/>
-                        <Button ToolTip="Удалить" Margin="160,0,0,93"  FontSize="8" Content="X" FontFamily="Arial Black" Background="#FF5259C1" BorderBrush="#FF002CB5" >
+                        <TextBox AcceptsReturn="True" AcceptsTab="True" Name="SymptomCode" TextWrapping="Wrap" Text="{Binding Code}" FontSize="10" VerticalContentAlignment="Center" Margin="10,16,10,79"/>
+                        <Button ToolTip="Удалить" Margin="0,0,0,93" Tag="{Binding}" FontSize="8" Content="X" FontFamily="Arial Black" Background="#FF5259C1" BorderBrush="#FF002CB5" HorizontalAlignment="Right" Width="16" >
                             <Button.Resources>
                                 <Style TargetType="Border">
                                     <Setter Property="CornerRadius" Value="5"/>
-                                    <!--<Setter Property="" Value="Fuchsia"/>-->
                                 </Style>
                             </Button.Resources>
                         </Button>
-                        <TextBox Name="SymptomValue" TextWrapping="Wrap" Text="{Binding Value}" FontSize="10" VerticalContentAlignment="Center" Margin="10,45,10,50"/>
-                        <TextBox Name="SymptomName"  Text="{Binding Name}" Margin="10,63,10,5" />
+                        <TextBox AcceptsReturn="True" AcceptsTab="True" Name="SymptomValue" TextWrapping="Wrap" Text="{Binding Value}" FontSize="10" VerticalContentAlignment="Center" Margin="10,45,10,50"/>
+                        <TextBox AcceptsReturn="True" AcceptsTab="True" Name="SymptomName" TextWrapping="WrapWithOverflow" Text="{Binding Name}" Margin="10,63,10,5" />
                     </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <Grid Background="#FFD8D8D8" Margin="404,46,10,0" Height="56" VerticalAlignment="Top">
+        <Grid Background="#FFD8D8D8" Margin="412,46,10,0" Height="56" VerticalAlignment="Top">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="175*"/>
                 <ColumnDefinition Width="211*"/>
             </Grid.ColumnDefinitions>
-            <Menu HorizontalAlignment="Left" Margin="1,38,0,0" VerticalAlignment="Top" Background="White">
+            <Menu HorizontalAlignment="Left" Margin="18,38,0,0" VerticalAlignment="Top" Background="White">
                 <MenuItem FontSize="10" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Header="Меню" Foreground="Black" RenderTransformOrigin="1.968,0.859" Height="16">
                     <MenuItem Header="Выделить все" />
                     <MenuItem Header="Снять выделение" />
@@ -49,9 +51,9 @@
                     <MenuItem Header="Переместить выбранное" />
                 </MenuItem>
             </Menu>
-            <TextBox TextWrapping="Wrap" FontSize="9" Text="{Binding SelectedSymptom.Name}" VerticalContentAlignment="Center" Margin="54,4,9,0" Height="14" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
+            <TextBox AcceptsReturn="True" AcceptsTab="True" TextWrapping="Wrap" FontSize="9" Text="{Binding SelectedSymptom.Name}" VerticalContentAlignment="Center" Margin="54,4,9,0" Height="14" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
             <TextBlock TextWrapping="Wrap" FontSize="10" Margin="7,4,0,0" HorizontalAlignment="Left"  VerticalAlignment="Top" ><Run Language="ru-ru" Text="Симптом"/></TextBlock>
-            <ComboBox x:Name="StatusSelector" FontSize="9" ItemsSource="{Binding SelectedSymptom.Statuses}" SelectionChanged="StatusSelector_OnSelected" Margin="0,38,101,2" HorizontalAlignment="Right" Width="60" Grid.Column="1">
+            <ComboBox x:Name="StatusSelector" FontSize="9" SelectedItem="{Binding SelectedSymptom.SelectedStatus}" ItemsSource="{Binding SelectedSymptom.Statuses}" SelectionChanged="StatusSelector_OnSelected" Margin="0,38,101,2" HorizontalAlignment="Right" Width="60" Grid.Column="1">
 
                 <!--<ComboBox.LayoutTransform>
                     <ScaleTransform ScaleX="0.8" ScaleY="0.8" />
@@ -59,7 +61,7 @@
 
             </ComboBox>
             <TextBlock TextWrapping="Wrap" FontSize="10" Margin="0,39,167,0"  VerticalAlignment="Top" HorizontalAlignment="Right" Width="29" Grid.Column="1" ><Run Text="С"/><Run Language="ru-ru" Text="татус"/></TextBlock>
-            <ComboBox x:Name="GenderSelector" FontSize="9" SelectionChanged="GenderSelector_OnSelected" ItemsSource="{Binding SelectedSymptom.Genders}" Margin="0,38,9,2" HorizontalAlignment="Right" Width="68" Grid.Column="1">
+            <ComboBox x:Name="GenderSelector" FontSize="9" SelectedItem="{Binding SelectedSymptom.SelectedGender}" SelectionChanged="GenderSelector_OnSelected" ItemsSource="{Binding SelectedSymptom.Genders}" Margin="0,38,9,2" HorizontalAlignment="Right" Width="68" Grid.Column="1">
                 <!--<TextBlock x:Name="Active1" FontSize="9" Text="Active" />-->
                 <!--<ComboBox.LayoutTransform>
                     <ScaleTransform ScaleX="0.8" ScaleY="0.8" />
@@ -67,23 +69,24 @@
 
             </ComboBox>
             <TextBlock TextWrapping="Wrap" FontSize="10" HorizontalAlignment="Right"  VerticalAlignment="Top" Text="Пол" Margin="0,39,80,0" Grid.Column="1"/>
-            <TextBox TextWrapping="Wrap" Text="{Binding SelectedSymptom.Code}" FontSize="10" VerticalContentAlignment="Center" Margin="54,21,6,20"/>
-            <TextBox TextWrapping="Wrap" Text="{Binding SelectedSymptom.Value}" FontSize="10" VerticalContentAlignment="Center" Margin="64,21,9,21" Grid.Column="1"/>
+            <TextBox AcceptsReturn="True" AcceptsTab="True" TextWrapping="Wrap" Text="{Binding SelectedSymptom.Code}" FontSize="10" VerticalContentAlignment="Center" Margin="54,21,6,20"/>
+            <TextBox TextWrapping="Wrap" AcceptsReturn="True" AcceptsTab="True" Text="{Binding SelectedSymptom.Value}" FontSize="10" VerticalContentAlignment="Center" Margin="64,21,9,21" Grid.Column="1"/>
             <TextBlock TextWrapping="Wrap" FontSize="10" Margin="7,0,0,0" HorizontalAlignment="Left" Text="Код" VerticalAlignment="Center" ></TextBlock>
             <TextBlock TextWrapping="Wrap" FontSize="10" Margin="15,0,0,0" Text="Значение" VerticalAlignment="Center" Grid.Column="1" HorizontalAlignment="Left" Width="44" />
+            <Button x:Name="AddSynonymsButton" Click="AddSynonymsButton_OnClick" ToolTip="Добавить синонимы" IsEnabled="{Binding SelectedSymptom}" Content="+" HorizontalContentAlignment="Center" FontFamily="Arial Black" FontSize="10" VerticalContentAlignment="Center" HorizontalAlignment="Left" Margin="0,38,0,0" VerticalAlignment="Top" Width="18" Height="17"/>
         </Grid>
-        <ListBox HorizontalContentAlignment="Stretch" ItemsSource="{Binding SelectedSymptom.Synonyms}" Margin="404,101,10,10">
+        <ListBox HorizontalContentAlignment="Stretch" ItemsSource="{Binding SelectedSymptom.Synonyms}" Margin="412,101,10,10">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Grid Height="26">
                         <Border Background="#FF737CE4" CornerRadius="5"></Border>
-                        <TextBox Text="{Binding Path=Name}" Margin="21,4,21,4" />
-                        <CheckBox IsChecked="True" Margin="4,5,355,0"/>
+                        <TextBox AcceptsReturn="True" AcceptsTab="True" Name="SynonymText" LostFocus="UIElement_OnLostFocus" PreviewTextInput="SynonymText_OnPreviewTextInput" Tag="{Binding}" Text="{Binding Path=Name}" Margin="21,4,21,4" />
+                        <CheckBox IsChecked="False" Margin="4,5,355,0"/>
                         <!--<CheckBox.LayoutTransform>
                     <ScaleTransform ScaleX="0.9" ScaleY="0.9" />
                 </CheckBox.LayoutTransform>
                 </CheckBox>-->
-                        <Button ToolTip="Удалить"  FontSize="8" Content="X" FontFamily="Arial Black" Background="#FF5259C1" BorderBrush="#FF002CB5" HorizontalAlignment="Right" Width="21" >
+                        <Button x:Name="RemoveSynonymButton" Click="ButtonBase_OnClick" ToolTip="Удалить"  Tag="{Binding}" FontSize="8" Content="X" FontFamily="Arial Black" Background="#FF5259C1" BorderBrush="#FF002CB5" HorizontalAlignment="Right" Width="21" >
                             <Button.Resources>
                                 <Style TargetType="Border">
                                     <Setter Property="CornerRadius" Value="5"/>

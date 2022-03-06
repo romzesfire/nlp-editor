@@ -1,0 +1,50 @@
+﻿<Window x:Class="NlpEditor.View.DuplicatesWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:NlpEditor.View"
+        mc:Ignorable="d"
+        Title="DuplicatesWindow" Height="450" Width="800" Closing="DuplicatesWindow_OnClosing">
+    <Grid>
+        <ListBox x:Name="DuplicateList" Margin="5,28,0,5" ItemsSource="{Binding DuplicatesView}" HorizontalContentAlignment="Stretch" HorizontalAlignment="Left" Width="257">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid x:Name="SynonymGrid" Height="84" Tag="{Binding}" MaxWidth="{Binding ElementName=DuplicateList, Path=Width}" MouseLeftButtonDown="SynonymGrid_OnMouseLeftButtonDown">
+                        <Border CornerRadius="5" Background="#FF2479C8" Grid.ColumnSpan="2"></Border>
+                        <TextBlock Foreground="AliceBlue" TextWrapping="Wrap" Text="Синоним" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10,7,0,0"/>
+                        <TextBox HorizontalScrollBarVisibility="Auto"  TextWrapping="Wrap" AcceptsReturn="True" AcceptsTab="True" IsReadOnly="True" Margin="10,23,10,10" Text="{Binding Synonym.Name}" />
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <ListBox x:Name="SymptomsList" Margin="266,28,5,5" ItemsSource="{Binding SelectedDuplicate.Symptoms}" HorizontalContentAlignment="Stretch">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid Height="100"  >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="243*"/>
+                            <ColumnDefinition Width="272*"/>
+                        </Grid.ColumnDefinitions>
+                        <Border CornerRadius="5" Background="Blue" Grid.ColumnSpan="2"/>
+                        <TextBox IsReadOnly="True"  AcceptsReturn="True" MaxWidth="{Binding ElementName=SymptomsList, Path=Width}"  AcceptsTab="True" Margin="10,36,10,9" Text="{Binding Name}" Grid.ColumnSpan="2" />
+                        <TextBox IsReadOnly="True" Margin="53,11,7,0" Text ="{Binding Code}"  VerticalAlignment="Top"/>
+                        <TextBlock Margin="19,12,0,0" Foreground="AliceBlue" TextWrapping="Wrap" Text="Код" VerticalAlignment="Top" HorizontalAlignment="Left" Width="21"/>
+                        <TextBox Margin="62,11,24,0" IsReadOnly="True" Text="{Binding Value}" VerticalAlignment="Top" Grid.Column="1"/>
+                        <TextBlock Margin="5,12,0,0" TextWrapping="Wrap" Foreground="AliceBlue" Text="Значение" VerticalAlignment="Top" HorizontalAlignment="Left" Grid.Column="1"/>
+                        <Button x:Name="RemoveSynonymFrom" Tag="{Binding}" Click="RemoveSynonymFrom_OnClick" ToolTip="Удалить" BorderThickness="0"  FontSize="8" Content="X" FontFamily="Arial Black" Background="#FF5259C1" BorderBrush="#FF002CB5" HorizontalAlignment="Right" Width="21" Height="21" VerticalAlignment="Top" Grid.Column="1" >
+                            <Button.Resources>
+                                <Style TargetType="Border">
+                                    <Setter Property="CornerRadius" Value="5"/>
+                                </Style>
+                            </Button.Resources>
+                        </Button>
+                    </Grid>
+
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+    </Grid>
+</Window>

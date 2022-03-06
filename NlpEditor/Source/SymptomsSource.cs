@@ -9,6 +9,30 @@ namespace NlpEditor.Source
 {
     public static class SymptomsSource
     {
-        public static Symptoms Symptoms { get; set; }
+        private static Symptoms _symptoms;
+
+        public static Symptoms Symptoms
+        {
+            get
+            {
+                return _symptoms;
+            }
+            set
+            {
+                _symptoms = value;
+            }
+        }
+
+        public static void Add(Symptom symptom)
+        {
+            if (Symptoms == null)
+            {
+                Symptoms = new Symptoms(new List<Symptom> { symptom });
+            }
+            else
+            {
+                Symptoms.AddSymptom(symptom);
+            }
+        }
     }
 }

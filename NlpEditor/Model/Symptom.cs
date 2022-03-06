@@ -55,6 +55,11 @@ namespace NlpEditor.Model
             }
         }
 
+        public bool ContainsSynonym(string synonym)
+        {
+            var find = Synonyms.Find(s => s.Name == synonym);
+            return find != null;
+        }
         public void SetStatus(string status)
         {
             if (status.ToLower() == "active")

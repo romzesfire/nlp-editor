@@ -19,6 +19,7 @@ namespace NlpEditor.DI
             var configuration = JsonConvert.DeserializeObject<AppConfiguration>(File.ReadAllText("appsettings.json"));
             _services = new ServiceCollection()
                 .AddSingleton<INlpFileLoader, NlpFileFromFileLoader>()
+                .AddSingleton<IDuplicateChecker, DuplicateChecker>()
                 .Configure<NlpConfiguration>(options =>
                 {
                     options.CodeRowIndex = configuration.Nlp.CodeRowIndex;
