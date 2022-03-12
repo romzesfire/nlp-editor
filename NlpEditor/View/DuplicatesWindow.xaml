@@ -22,27 +22,31 @@
         <ListBox x:Name="SymptomsList" Margin="266,28,5,5" ItemsSource="{Binding SelectedDuplicate.Symptoms}" HorizontalContentAlignment="Stretch">
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <Grid Height="100"  >
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="243*"/>
-                            <ColumnDefinition Width="272*"/>
-                        </Grid.ColumnDefinitions>
-                        <Border CornerRadius="5" Background="Blue" Grid.ColumnSpan="2"/>
-                        <TextBox IsReadOnly="True"  AcceptsReturn="True" MaxWidth="{Binding ElementName=SymptomsList, Path=Width}"  AcceptsTab="True" Margin="10,36,10,9" Text="{Binding Name}" Grid.ColumnSpan="2" />
-                        <TextBox IsReadOnly="True" Margin="53,11,7,0" Text ="{Binding Code}"  VerticalAlignment="Top"/>
-                        <TextBlock Margin="19,12,0,0" Foreground="AliceBlue" TextWrapping="Wrap" Text="Код" VerticalAlignment="Top" HorizontalAlignment="Left" Width="21"/>
-                        <TextBox Margin="62,11,24,0" IsReadOnly="True" Text="{Binding Value}" VerticalAlignment="Top" Grid.Column="1"/>
-                        <TextBlock Margin="5,12,0,0" TextWrapping="Wrap" Foreground="AliceBlue" Text="Значение" VerticalAlignment="Top" HorizontalAlignment="Left" Grid.Column="1"/>
-                        <Button x:Name="RemoveSynonymFrom" Tag="{Binding}" Click="RemoveSynonymFrom_OnClick" ToolTip="Удалить" BorderThickness="0"  FontSize="8" Content="X" FontFamily="Arial Black" Background="#FF5259C1" BorderBrush="#FF002CB5" HorizontalAlignment="Right" Width="21" Height="21" VerticalAlignment="Top" Grid.Column="1" >
-                            <Button.Resources>
-                                <Style TargetType="Border">
-                                    <Setter Property="CornerRadius" Value="5"/>
-                                </Style>
-                            </Button.Resources>
-                        </Button>
+            <Grid Height="100" MouseDown="UIElement_OnMouseDown" Tag="{Binding}" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="243*"/>
+                    <ColumnDefinition Width="272*"/>
+                </Grid.ColumnDefinitions>
+                <Border CornerRadius="5" Background="Blue" Grid.ColumnSpan="2">
+
+                </Border>
+                
+                <TextBox IsReadOnly="True"  AcceptsReturn="True" MaxWidth="{Binding ElementName=SymptomsList, Path=Width}"  AcceptsTab="True" Margin="10,36,10,9" Text="{Binding Name}" Grid.ColumnSpan="2" />
+                <TextBox IsReadOnly="True" Margin="56,11,4,0" Text ="{Binding Code}"  VerticalAlignment="Top"/>
+                <TextBlock Margin="32,12,0,0" Foreground="AliceBlue" TextWrapping="Wrap" Text="Код" VerticalAlignment="Top" HorizontalAlignment="Left" Width="21"/>
+                <TextBox Margin="62,11,24,0" IsReadOnly="True" Text="{Binding Value}" VerticalAlignment="Top" Grid.Column="1"/>
+                <TextBlock Margin="5,12,0,0" TextWrapping="Wrap" Foreground="AliceBlue" Text="Значение" VerticalAlignment="Top" HorizontalAlignment="Left" Grid.Column="1"/>
+                <Button x:Name="RemoveSynonymFrom" Tag="{Binding}" Click="RemoveSynonymFrom_OnClick" ToolTip="Удалить" BorderThickness="0"  FontSize="8" Content="X" FontFamily="Arial Black" Background="#FF5259C1" BorderBrush="#FF002CB5" HorizontalAlignment="Right" Width="21" Height="21" VerticalAlignment="Top" Grid.Column="1" >
+                    <Button.Resources>
+                        <Style TargetType="Border">
+                            <Setter Property="CornerRadius" Value="5"/>
+                        </Style>
+                    </Button.Resources>
+                </Button>
+                <Image Margin="4,0,215,68" Source="{Binding GenderImage}" Height="24" VerticalAlignment="Bottom"/>
                     </Grid>
 
-                </DataTemplate>
+            </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
 

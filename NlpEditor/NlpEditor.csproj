@@ -12,6 +12,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Resources\close.png" />
+    <None Remove="Resources\icon-female.png" />
+    <None Remove="Resources\icon-male.png" />
+    <None Remove="Resources\icon-search.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="Model\SymptomsBase.cs" />
   </ItemGroup>
 
@@ -25,9 +32,42 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Reference Include="smileNET">
+      <HintPath>..\..\ModelTest\bin\x64\Debug\smileNET.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="License.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\close.png" />
+    <Resource Include="Resources\icon-female.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\icon-male.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\icon-search.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="View\DuplicatesSymptomsWindow.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="View\DuplicatesSymptomsWindow.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
 
 </Project>

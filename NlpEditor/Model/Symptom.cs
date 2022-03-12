@@ -11,21 +11,21 @@ namespace NlpEditor.Model
 {
     public enum Status
     {
+        Draft = 0,
         Active,
-        Inactive,
-        None
+        Inactive
     }
     [Serializable]
     public enum Gender
     {
-        None,
+        None = 0,
         Male,
         Female
     }
     [Serializable]
     public class Symptom
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
         public string Name { get; set; }
         public Coding Code { get; set; }
         public Coding Value { get; set; }
@@ -36,7 +36,8 @@ namespace NlpEditor.Model
 
         public Symptom()
         {
-
+            Id = Guid.NewGuid().ToString();
+            Synonyms = new List<Synonym>();
         }
 
         public void SetGender(string gender)
@@ -72,7 +73,7 @@ namespace NlpEditor.Model
             }
             else
             {
-                Status = Status.None;
+                Status = Status.Draft;
             }
         }
 

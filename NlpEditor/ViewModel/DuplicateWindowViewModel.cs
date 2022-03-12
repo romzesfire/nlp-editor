@@ -58,7 +58,7 @@ namespace NlpEditor.ViewModel
 
     public class DuplicatesWindowViewModel : INotifyPropertyChanged
     {
-        private Duplicates _duplicates;
+        private DuplicateSynonyms _duplicateSynonyms;
         private MainWindowViewModel _mainViewModel;
         private ObservableCollection<DuplicateWindowViewModel> _duplicatesView;
         private DuplicateWindowViewModel _selectedDuplicate;
@@ -88,16 +88,16 @@ namespace NlpEditor.ViewModel
                 OnPropertyChanged();
             }
         }
-        public DuplicatesWindowViewModel(Duplicates duplicates, MainWindowViewModel mainViewModel)
+        public DuplicatesWindowViewModel(DuplicateSynonyms duplicateSynonyms, MainWindowViewModel mainViewModel)
         {
             _mainViewModel = mainViewModel;
-            _duplicatesView = GetAllDuplicatesView(duplicates);
+            _duplicatesView = GetAllDuplicatesView(duplicateSynonyms);
         }
 
-        public ObservableCollection<DuplicateWindowViewModel> GetAllDuplicatesView(Duplicates duplicates)
+        public ObservableCollection<DuplicateWindowViewModel> GetAllDuplicatesView(DuplicateSynonyms duplicateSynonyms)
         {
             var duplicatesView = new ObservableCollection<DuplicateWindowViewModel>();
-            foreach (var duplicate in duplicates)
+            foreach (var duplicate in duplicateSynonyms)
             {
                 var symptomsView = new ObservableCollection<SymptomViewModel>();
                 foreach (var symptom in duplicate.SymptomsReference)
@@ -109,7 +109,7 @@ namespace NlpEditor.ViewModel
 
                     symptomsView.Add(symptomView);
                 }
-                duplicatesView.Add(new DuplicateWindowViewModel(new SynonymViewModel(duplicate.DuplicateSynonym), symptomsView));
+                duplicatesView.Add(new DuplicateWindowViewModel(new SynonymViewModel(duplicate.Synonym), symptomsView));
             }
 
             return duplicatesView;

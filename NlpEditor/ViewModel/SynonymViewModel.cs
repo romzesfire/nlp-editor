@@ -16,7 +16,20 @@ namespace NlpEditor.ViewModel
     public class SynonymViewModel : INotifyPropertyChanged
     {
         private string _name;
+        private bool _isChecked;
         private IDuplicateChecker _checker;
+        public bool IsChecked
+        {
+            get
+            {
+                return _isChecked;
+            }
+            set
+            {
+                _isChecked = value;
+                OnPropertyChanged();
+            }
+        }
         public string Name
         {
             get
@@ -28,7 +41,6 @@ namespace NlpEditor.ViewModel
                 _name = value;
                 OnPropertyChanged();
                 SynonymReference.Name = value;
-                //CheckDuplicate(value);
             }
         }
         public Synonym SynonymReference { get; set; }
@@ -37,6 +49,7 @@ namespace NlpEditor.ViewModel
             _checker = Services.GetService<IDuplicateChecker>();
             SynonymReference = synonym;
             Name = synonym.Name;
+            IsChecked = false;
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;

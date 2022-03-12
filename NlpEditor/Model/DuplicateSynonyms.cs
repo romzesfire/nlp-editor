@@ -7,29 +7,29 @@ using System.Threading.Tasks;
 
 namespace NlpEditor.Model
 {
-    public class Duplicates : IEnumerable<Duplicate>
+    public class DuplicateSynonyms : IEnumerable<DuplicateSynonym>
     {
-        private List<Duplicate> _duplicates { get; set; }
+        private List<DuplicateSynonym> _duplicates { get; set; }
 
-        public Duplicates()
+        public DuplicateSynonyms()
         {
-            _duplicates = new List<Duplicate>();
+            _duplicates = new List<DuplicateSynonym>();
         }
 
-        public Duplicates(Duplicate duplicate)
+        public DuplicateSynonyms(DuplicateSynonym duplicateSynonym)
         {
-            _duplicates = new List<Duplicate> { duplicate };
+            _duplicates = new List<DuplicateSynonym> { duplicateSynonym };
         }
 
         public int Count()
         {
             return _duplicates.Count;
         }
-        public void Add(Duplicate duplicate)
+        public void Add(DuplicateSynonym duplicateSynonym)
         {
-            _duplicates.Add(duplicate);
+            _duplicates.Add(duplicateSynonym);
         }
-        public IEnumerator<Duplicate> GetEnumerator()
+        public IEnumerator<DuplicateSynonym> GetEnumerator()
         {
             foreach (var duplicate in _duplicates)
             {
@@ -43,14 +43,14 @@ namespace NlpEditor.Model
         }
     }
 
-    public class Duplicate
+    public class DuplicateSynonym
     {
-        public Synonym DuplicateSynonym { get; set; }
+        public Synonym Synonym { get; set; }
         public List<Symptom> SymptomsReference { get; set; }
 
-        public Duplicate(Synonym synonym, List<Symptom> symptoms)
+        public DuplicateSynonym(Synonym synonym, List<Symptom> symptoms)
         {
-            DuplicateSynonym = synonym;
+            Synonym = synonym;
             SymptomsReference = symptoms;
         }
     }

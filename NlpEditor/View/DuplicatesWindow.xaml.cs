@@ -61,5 +61,10 @@ namespace NlpEditor.View
                 e.Cancel = true;
             }
         }
+
+        private void UIElement_OnMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            
+        }
     }
 }

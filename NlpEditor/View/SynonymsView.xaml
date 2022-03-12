@@ -1,0 +1,37 @@
+﻿<Window x:Class="NlpEditor.View.SynonymsView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:NlpEditor.View"
+        mc:Ignorable="d"
+        Title="SynonymsView" Height="450" Width="540">
+    <Grid>
+        <ScrollViewer Margin="10,96,10,10" Name="ScrollViewer1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" CanContentScroll="True">
+            <ItemsControl ItemsSource="{Binding Synonyms}" x:Name="tStack"  Background="#FFCECECE" >
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel x:Name="SynonymsPanel" CanVerticallyScroll="True" Orientation="Vertical"  CanHorizontallyScroll="True"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <TextBox IsReadOnly="True" Text="{Binding Name}"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+        <Grid Margin="10,10,10,0" Background="#FF3D9EDC" Height="86" VerticalAlignment="Top">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="250*"/>
+                <ColumnDefinition Width="250*"/>
+            </Grid.ColumnDefinitions>
+            <TextBox IsReadOnly="True" Margin="52,6,17,0" TextWrapping="Wrap" Text="{Binding Code}" VerticalAlignment="Top"/>
+            <TextBox IsReadOnly="True" Margin="61,6,5,0" TextWrapping="Wrap" Text="{Binding Value}" VerticalAlignment="Top" Grid.Column="1"/>
+            <TextBox IsReadOnly="True" Grid.ColumnSpan="2" Margin="5,27,5,0" Text="{Binding Name}" TextWrapping="Wrap" Height="38" VerticalAlignment="Top" />
+            <TextBlock HorizontalAlignment="Left" Margin="23,7,0,0" TextWrapping="Wrap" Text="Код" VerticalAlignment="Top"/>
+            <TextBlock HorizontalAlignment="Left" Margin="6,7,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Grid.Column="1"><Run Language="ru-ru" Text="Значение"/></TextBlock>
+            <Button Grid.Column="1" Click="CopySynonyms_OnClick" FontSize="10" Content="Скопировать синонимы" Margin="0,0,5,2" HorizontalAlignment="Right" Width="116" Height="17" VerticalAlignment="Bottom"/>
+        </Grid>
+    </Grid>
+</Window>

@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 namespace NlpEditor.Configuration
 {
     [Serializable]
-    public class AppConfiguration
+    public class GenieConfiguration
     {
-        public NlpConfiguration Nlp { get; set; }
-        public GenieConfiguration Genie { get; set; }
+        public string LicenseFile { get; set; }
     }
 }

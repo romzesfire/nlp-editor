@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Drawing;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using NlpEditor.DI;
 using NlpEditor.Model;
 using NlpEditor.Source;
@@ -20,8 +23,23 @@ namespace NlpEditor.ViewModel
         private string _code;
         private string _value;
         private string _name;
+        private ImageSource _genderImage;
         public Status _selectedStatus;
         public Gender _selectedGender;
+        
+        public string Id;
+        public ImageSource GenderImage
+        {
+            get
+            {
+                return _genderImage;
+            }
+            set
+            {
+                _genderImage = value;
+                OnPropertyChanged();
+            }
+        }
         public string Code
         {
             get
@@ -55,6 +73,7 @@ namespace NlpEditor.ViewModel
             set
             {
                 _name = value;
+                SymptomReference.Name = value;
                 OnPropertyChanged();
             }
         }
@@ -67,6 +86,7 @@ namespace NlpEditor.ViewModel
             set
             {
                 _selectedStatus = value;
+                SymptomReference.Status = value;
                 OnPropertyChanged();
             }
         }
@@ -79,6 +99,19 @@ namespace NlpEditor.ViewModel
             set
             {
                 _selectedGender = value;
+                if (value == Gender.Female)
+                {
+                    GenderImage = Resources.Resources.FemaleImage;
+                }
+                else if (value == Gender.Male)
+                {
+                    GenderImage = Resources.Resources.MaleImage;
+                }
+                else
+                {
+                    GenderImage = null;
+                }
+                SymptomReference.Gender = value;
                 OnPropertyChanged();
             }
         }
@@ -89,11 +122,14 @@ namespace NlpEditor.ViewModel
         public event PropertyChangedEventHandler? PropertyChanged;
         public SymptomViewModel(Symptom symptom)
         {
-            Code = CodesConverter.CodingToShort(symptom.Code);
+            SymptomReference = symptom;
+            if (symptom.Code != null)
+                Code = CodesConverter.CodingToShort(symptom.Code);
             if (symptom.Value != null)
                 Value = CodesConverter.CodingToShort(symptom.Value);
+            Id = symptom.Id;
             Name = symptom.Name;
-            SymptomReference = symptom;
+            
             SelectedGender = symptom.Gender;
             SelectedStatus = symptom.Status;
             Synonyms = new ObservableCollection<SynonymViewModel>(
@@ -131,6 +167,17 @@ namespace NlpEditor.ViewModel
                 RemoveSynonym(toRemove);
 
         }
+
+
+        public void RemoveSynonyms(IEnumerable<SynonymViewModel> synonyms)
+        {
+            var names = synonyms.Select(s => new string(s.Name)).ToArray();
+            for (int i = 0; i < names.Count(); i++)
+            {
+                RemoveSynonym(names[i]);
+            }
+
+        }
         private void SetGenders()
         {
             Genders = new ObservableCollection<Gender>();
@@ -143,7 +190,8 @@ namespace NlpEditor.ViewModel
         {
             var statusType = typeof(Status);
             var members = statusType.GetMembers();
-            var statuses = members.Where(m => m is FieldInfo field && field.GetValue(Status.Active).GetType() == typeof(Status));
+            var statuses = members.Where(m => m is FieldInfo field 
+                                              && field.GetValue(Status.Active).GetType() == typeof(Status));
             Statuses = new ObservableCollection<Status>();
             foreach (var status in statuses)
             {

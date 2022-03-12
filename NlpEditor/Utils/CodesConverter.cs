@@ -26,8 +26,25 @@ namespace NlpEditor.Utils
                     throw new ApplicationException($"Codesystem {code.CodeSystemUrl} is not found");
             }
         }
+        public static string ConvertToShortCodeSystem(string codeSystemUrl)
+        {
+            switch (codeSystemUrl)
+            {
+                case CodeSystem.Url.Loinc:
+                    return CodeSystem.ShortName.Loinc;
+                case CodeSystem.Url.Medlinx:
+                    return CodeSystem.ShortName.Medlinx;
+                case CodeSystem.Url.Omim:
+                    return CodeSystem.ShortName.Omim;
+                case CodeSystem.Url.Snomed:
+                    return CodeSystem.ShortName.Snomed;
+                default:
+                    throw new ApplicationException($"Codesystem {codeSystemUrl} is not found");
+            }
+        }
         public static Coding ShortToCoding(string code)
         {
+            
             if (code.StartsWith(CodeSystem.ShortName.Loinc))
                 return new Coding(CodeSystem.Url.Loinc, code.Replace(CodeSystem.ShortName.Loinc, ""));
 
@@ -38,7 +55,12 @@ namespace NlpEditor.Utils
                 return new Coding(CodeSystem.Url.Omim, code.Replace(CodeSystem.ShortName.Omim, ""));
 
             if (code.StartsWith(CodeSystem.ShortName.Snomed))
+            {
+                if (code.Contains("7777777"))
+                    return new Coding(CodeSystem.Url.Medlinx, code.Replace(CodeSystem.ShortName.Snomed, ""));
+
                 return new Coding(CodeSystem.Url.Snomed, code.Replace(CodeSystem.ShortName.Snomed, ""));
+            }
 
             throw new ApplicationException($"Codesystem of {code} is not found");
         }

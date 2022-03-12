@@ -63,19 +63,19 @@ namespace NlpEditor.Utils
 
                         var symptom = new Symptom()
                         {
-                            Name = name == null ? null : name.ToString(),
+                            Name = name == null ? null : TrimLine(name.ToString()),
                             Area = area,
-                            Code = codeSystem != null && code != null ? CodesConverter.ShortToCoding(codeSystem.ToString() + code.ToString()) : null,
+                            Code = codeSystem != null && code != null ? CodesConverter.ShortToCoding(TrimLine(codeSystem.ToString()) + TrimLine(code.ToString())) : null,
                             Synonyms = synonyms
                         };
                         if (valuecode != null && valuesystem != null)
                         {
-                            symptom.Value = CodesConverter.ShortToCoding(valuesystem.ToString() + valuecode.ToString());
+                            symptom.Value = CodesConverter.ShortToCoding(TrimLine(valuesystem.ToString()) + TrimLine(valuecode.ToString()));
                         }
 
                         if (gender != null)
                         {
-                            symptom.SetGender(gender.ToString());
+                            symptom.SetGender(TrimLine(gender.ToString()));
                         }
                         else
                         {
@@ -83,7 +83,7 @@ namespace NlpEditor.Utils
                         }
                         if (status != null)
                         {
-                            symptom.SetStatus(status.ToString());
+                            symptom.SetStatus(TrimLine(status.ToString()));
                         }
                         else
                         {
@@ -95,6 +95,11 @@ namespace NlpEditor.Utils
             }
 
             SymptomsSource.Symptoms = symptoms;
+        }
+
+        private string TrimLine(string line)
+        {
+            return line.Trim(' ', ',', '\n', '\r', '\t', '_');
         }
     }
 
