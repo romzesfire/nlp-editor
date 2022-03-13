@@ -59,6 +59,7 @@ namespace NlpEditor.View
 
         private void Cancel_OnClick(object sender, RoutedEventArgs e)
         {
+            _viewModel.IsCanceled = true;
             Close();
         }
     }

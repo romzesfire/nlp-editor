@@ -14,29 +14,44 @@ namespace NlpEditor.DI
     public static class Services
     {
         private static IServiceProvider _services { get; set; }
+        public static AppConfiguration Configuration { get; set; }
         public static void Set()
         {
-            var configuration = JsonConvert.DeserializeObject<AppConfiguration>(File.ReadAllText("appsettings.json"));
+            Configuration = JsonConvert.DeserializeObject<AppConfiguration>(File.ReadAllText("appsettings.json"));
             _services = new ServiceCollection()
-                .AddSingleton<INlpFileLoader, NlpFileFromFileLoader>()
+                .AddSingleton<INlpFileLoader, NlpFileFromExcelLoader>()
+                .AddSingleton<INlpFileLoader, NlpFromNlpsLoader>()
                 .AddSingleton<INetworkProvider, NetworksProvider>()
                 .AddSingleton<IDuplicateChecker, DuplicateChecker>()
-                .AddSingleton<INlpSaver, NlpToFileSaver>()
+                .AddSingleton<INlpSaver, NlpToExcelSaver>()
+                .AddSingleton<INlpSaver, NlpToJsonSaver>()
+                .AddSingleton<INlpSaver, NlpToNlpsSaver>()
+                .AddSingleton<IDesignationsLoader, GoogleLoader>()
+                .AddSingleton<IDesignationsProvider, DesignationsGoogleProvider>()
                 .Configure<GenieConfiguration>(options =>
                 {
-                    options.LicenseFile = configuration.Genie.LicenseFile;
+                    options.LicenseFile = Configuration.Genie.LicenseFile;
                 })
                 .Configure<NlpConfiguration>(options =>
                 {
-                    options.CodeRowIndex = configuration.Nlp.CodeRowIndex;
-                    options.CodeSystemCodeIndex = configuration.Nlp.CodeSystemCodeIndex;
-                    options.GenderRowIndex = configuration.Nlp.GenderRowIndex;
-                    options.PriorNameRowIndex = configuration.Nlp.PriorNameRowIndex;
-                    options.StartIndexColumn = configuration.Nlp.StartIndexColumn;
-                    options.StatusRowIndex = configuration.Nlp.StatusRowIndex;
-                    options.ValueCodeRowIndex = configuration.Nlp.ValueCodeRowIndex;
-                    options.ValueCodeSystemRowIndex = configuration.Nlp.ValueCodeSystemRowIndex;
-                    options.SymptomsStartRowIndex = configuration.Nlp.SymptomsStartRowIndex;
+                    options.CodeRowIndex = Configuration.Nlp.CodeRowIndex;
+                    options.CodeSystemCodeIndex = Configuration.Nlp.CodeSystemCodeIndex;
+                    options.GenderRowIndex = Configuration.Nlp.GenderRowIndex;
+                    options.PriorNameRowIndex = Configuration.Nlp.PriorNameRowIndex;
+                    options.StartIndexColumn = Configuration.Nlp.StartIndexColumn;
+                    options.StatusRowIndex = Configuration.Nlp.StatusRowIndex;
+                    options.ValueCodeRowIndex = Configuration.Nlp.ValueCodeRowIndex;
+                    options.ValueCodeSystemRowIndex = Configuration.Nlp.ValueCodeSystemRowIndex;
+                    options.SymptomsStartRowIndex = Configuration.Nlp.SymptomsStartRowIndex;
+                })
+                .Configure<GoogleConfiguration>(o =>
+                {
+                    o.CodeIndexConcepts = Configuration.Google.CodeIndexConcepts;
+                    o.CodeIndexExtensions = Configuration.Google.CodeIndexExtensions;
+                    o.ConceptDesignations = Configuration.Google.ConceptDesignations;
+                    o.DesignationsIndexConcepts = Configuration.Google.DesignationsIndexConcepts;
+                    o.DesignationsIndexExtensions = Configuration.Google.DesignationsIndexExtensions;
+                    o.SnomedExtensions = Configuration.Google.SnomedExtensions;
                 })
                 .BuildServiceProvider();
 
@@ -45,6 +60,10 @@ namespace NlpEditor.DI
         public static T GetService<T>()
         {
             return _services.GetService<T>();
+        }
+        public static IEnumerable<T> GetServices<T>()
+        {
+            return _services.GetServices<T>();
         }
     }
 }

@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NlpEditor.DI;
 using NlpEditor.Model;
+using NlpEditor.Utils;
 
 namespace NlpEditor.Source
 {
@@ -33,6 +35,12 @@ namespace NlpEditor.Source
             {
                 Symptoms.AddSymptom(symptom);
             }
+        }
+
+        public static void AutoSave()
+        {
+            INlpSaver saver = Services.GetServices<INlpSaver>().OfType<NlpToNlpsSaver>().First();
+            saver.SaveFile(Services.Configuration.General.AutoSaveFileName, Symptoms);
         }
     }
 }

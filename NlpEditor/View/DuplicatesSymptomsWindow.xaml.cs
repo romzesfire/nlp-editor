@@ -80,5 +80,10 @@ namespace NlpEditor.View
             var synonymView = new SynonymsView(symptom);
             synonymView.Show();
         }
+
+        private void Close_OnClick(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
     }
 }

@@ -5,8 +5,39 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NlpEditor"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="900" Background="{x:Null}">
+        Title="Редактор NLP" Height="450" Width="900" Background="{x:Null}" Closing="MainWindow_OnClosing" WindowStyle="ThreeDBorderWindow">
+
     <Window.Resources>
+
+
+
+        <!-- SimpleStyles: ComboBoxItem -->
+        <Style x:Key="{x:Type ComboBoxItem}" TargetType="{x:Type ComboBoxItem}">
+            <Setter Property="SnapsToDevicePixels" Value="true"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="OverridesDefaultStyle" Value="true"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ComboBoxItem}">
+                        <Border Name="Border"
+                              Padding="2"
+                              SnapsToDevicePixels="true">
+                            <ContentPresenter />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsHighlighted" Value="true">
+                                <Setter TargetName="Border" Property="Background" Value="#FF4F4F4F"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Foreground" Value="#888888"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+
         <Style TargetType="Button" >
             <Setter Property="BorderBrush" Value="#A65F00"/>
             <Setter Property="Background" Value="#BF8230"/>
@@ -47,6 +78,7 @@
         </Style>
         <Style TargetType="ListBox" >
             <Setter Property="BorderBrush" Value="SaddleBrown"></Setter>
+            <Setter Property="Background" Value="#FFEBF5FF"></Setter>
             <Style.Resources>
                 <Style TargetType="Border">
                     <Setter Property="CornerRadius" Value="5" />
@@ -88,33 +120,42 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <TreeView BorderBrush="SaddleBrown" x:Name="AreasTree" Margin="10,43,0,10" HorizontalAlignment="Left" Width="197" Background="{x:Null}">
+
+        <TreeView  BorderBrush="SaddleBrown" x:Name="AreasTree" Margin="10,43,0,10" HorizontalAlignment="Left" Width="197" Background="{x:Null}">
+
             <TreeView.ItemTemplate>
                 <HierarchicalDataTemplate ItemsSource="{Binding Path=Nodes}">
-                    <Button Height="30" Width="100" BorderBrush="Black" AllowDrop="True" Drop="SymptomsSelect_OnDrop" x:Name="FormulationsSelect" BorderThickness="1" Click="SymptomsSelect_OnClick" Content="{Binding Name}" Tag="{Binding Tag}" Background="White"/>
+                    <Button Height="40" Width="120" Margin="1" BorderBrush="Black" AllowDrop="True" Drop="SymptomsSelect_OnDrop" x:Name="FormulationsSelect" BorderThickness="1" Click="SymptomsSelect_OnClick" Tag="{Binding Tag}" Background="White">
+                        <TextBlock Text="{Binding Name}"/>
+                    </Button>
                 </HierarchicalDataTemplate>
             </TreeView.ItemTemplate>
         </TreeView>
-        <ListBox Background="#FFEBF5FF" x:Name="SymptomsToSelectList" Margin="210,101,0,10" ItemsSource="{Binding SymptomsToSelect, Mode=TwoWay}" HorizontalContentAlignment="Left" HorizontalAlignment="Left" Width="217">
+
+        <ListBox x:Name="SymptomsToSelectList" Margin="210,101,0,10" ItemsSource="{Binding SymptomsToSelect, Mode=TwoWay}" HorizontalContentAlignment="Left" HorizontalAlignment="Left" Width="217">
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <Grid Style="{StaticResource ListGrids}" Name="SymptomGrid" MouseDown="SymptomGrid_OnMouseDown" Tag="{Binding}" Width="188" MaxWidth="{Binding ElementName=SymptomsToSelectList, Path=Width}" MouseLeftButtonDown="Symptom_OnMouseLeftButtonDown" Height="109" >
+                    <Grid Style="{StaticResource ListGrids}" Name="SymptomGrid" MouseDown="SymptomGrid_OnMouseDown" Tag="{Binding}" Width="188" MaxWidth="{Binding ElementName=SymptomsToSelectList, Path=Width}" MouseLeftButtonDown="Symptom_OnMouseLeftButtonDown" Height="120" >
                         <Border>
+                            <Ellipse Fill="{Binding SelectedStatusColor}" HorizontalAlignment="Left" Height="10" StrokeThickness="0" Margin="3,3,0,0" Stroke="Black" VerticalAlignment="Top" Width="10">
+
+                            </Ellipse>
+
 
                         </Border>
-                        <Image Margin="121,3,33,92" Source="{Binding GenderImage, Mode=TwoWay}"/>
-                        <TextBlock Style="{StaticResource TextBlockLists}" TextWrapping="Wrap" FontSize="10"  Text="Код" Margin="10,4,0,90" HorizontalAlignment="Left" />
-                        <TextBlock Style="{StaticResource TextBlockLists}" TextWrapping="Wrap" FontSize="10"  Text="Значение" Margin="10,32,0,62" HorizontalAlignment="Left" />
-                        <TextBox IsReadOnly="True" AcceptsReturn="True" AcceptsTab="True" Name="SymptomCode" TextWrapping="Wrap" Text="{Binding Code}"  FontSize="10" VerticalContentAlignment="Center" Margin="10,19,10,76"/>
-                        <Button ToolTip="Удалить" Margin="0,0,0,93" Tag="{Binding}" FontSize="8" Content="X" FontFamily="Arial Black" Background="#FF5259C1" BorderBrush="#FF002CB5" HorizontalAlignment="Right" Width="16" >
+                        <Image Margin="126,0,38,93" Source="{Binding GenderImage, Mode=TwoWay}" Height="24" Width="24" VerticalAlignment="Bottom"/>
+                        <TextBlock Style="{StaticResource TextBlockLists}" TextWrapping="Wrap" FontSize="10"  Text="Код" Margin="10,0,0,90" HorizontalAlignment="Left" Height="15" VerticalAlignment="Bottom" />
+                        <TextBlock Style="{StaticResource TextBlockLists}" TextWrapping="Wrap" FontSize="10"  Text="Значение" Margin="10,0,0,62" HorizontalAlignment="Left" Height="15" VerticalAlignment="Bottom" />
+                        <TextBox IsReadOnly="True" AcceptsReturn="True" AcceptsTab="True" Name="SymptomCode" TextWrapping="Wrap" Text="{Binding Code}"  FontSize="10" VerticalContentAlignment="Center" Margin="10,0,10,76" Height="14" VerticalAlignment="Bottom"/>
+                        <Button ToolTip="Удалить" Tag="{Binding}" Click="RemoveSymptom_OnClick" FontSize="8" Content="X" FontFamily="Arial Black" Background="#FF5259C1" BorderBrush="#FF002CB5" HorizontalAlignment="Right" Width="16" Height="16" VerticalAlignment="Top" >
                             <Button.Resources>
                                 <Style TargetType="Border">
                                     <Setter Property="CornerRadius" Value="5"/>
                                 </Style>
                             </Button.Resources>
                         </Button>
-                        <TextBox IsReadOnly="True" AcceptsReturn="True" AcceptsTab="True" Name="SymptomValue" TextWrapping="Wrap" Text="{Binding Value}" FontSize="10" VerticalContentAlignment="Center" Margin="10,46,10,49"/>
-                        <TextBox IsReadOnly="True" AcceptsReturn="True" AcceptsTab="True" Name="SymptomName" TextWrapping="WrapWithOverflow" Text="{Binding Name}" Margin="10,63,10,5" />
+                        <TextBox IsReadOnly="True" AcceptsReturn="True" AcceptsTab="True" Name="SymptomValue" TextWrapping="Wrap" Text="{Binding Value}" FontSize="10" VerticalContentAlignment="Center" Margin="10,0,10,49" Height="14" VerticalAlignment="Bottom"/>
+                        <TextBox IsReadOnly="True" AcceptsReturn="True" AcceptsTab="True" Name="SymptomName" TextWrapping="WrapWithOverflow" Text="{Binding Name}" Margin="10,0,10,5" Height="41" VerticalAlignment="Bottom" />
                     </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>
@@ -146,7 +187,8 @@
             </ComboBox>
 
             <TextBlock TextWrapping="Wrap" FontSize="10" Margin="0,39,167,0"  VerticalAlignment="Top" HorizontalAlignment="Right" Width="29" Grid.Column="1" ><Run Text="С"/><Run Language="ru-ru" Text="татус"/></TextBlock>
-            <ComboBox x:Name="GenderSelector" FontSize="9" SelectedItem="{Binding SelectedSymptom.SelectedGender}" SelectionChanged="GenderSelector_OnSelected" ItemsSource="{Binding SelectedSymptom.Genders}" Margin="0,38,9,2" HorizontalAlignment="Right" Width="68" Grid.Column="1">
+            <ComboBox x:Name="GenderSelector" FontSize="9" SelectedItem="{Binding SelectedSymptom.SelectedGender}" SelectionChanged="GenderSelector_OnSelected" ItemsSource="{Binding SelectedSymptom.Genders}" Margin="0,38,9,2" HorizontalAlignment="Right" Width="65" Grid.Column="1" BorderBrush="#FFC1C1C1">
+
                 <!--<TextBlock x:Name="Active1" FontSize="9" Text="Active" />-->
                 <!--<ComboBox.LayoutTransform>
                     <ScaleTransform ScaleX="0.8" ScaleY="0.8" />
@@ -158,9 +200,9 @@
             <TextBox x:Name="ValueField" LostFocus="ValueField_OnLostFocus" TextWrapping="Wrap" AcceptsReturn="True" AcceptsTab="True" Text="{Binding SelectedSymptom.Value}" FontSize="10" VerticalContentAlignment="Center" Margin="64,21,9,21" Grid.Column="1"/>
             <TextBlock TextWrapping="Wrap" FontSize="10" Margin="7,0,0,0" HorizontalAlignment="Left" Text="Код" VerticalAlignment="Center" ></TextBlock>
             <TextBlock TextWrapping="Wrap" FontSize="10" Margin="15,0,0,0" Text="Значение" VerticalAlignment="Center" Grid.Column="1" HorizontalAlignment="Left" Width="44" />
-            <Button x:Name="AddSynonymsButton" Click="AddSynonymsButton_OnClick" ToolTip="Добавить синонимы" IsEnabled="{Binding SelectedSymptom}" Content="+" HorizontalContentAlignment="Center" FontFamily="Arial Black" FontSize="10" VerticalContentAlignment="Center" HorizontalAlignment="Left" Margin="4,38,0,0" VerticalAlignment="Top" Width="17" Height="16"/>
+            <Button x:Name="AddSynonymsButton" Click="AddSynonymsButton_OnClick" ToolTip="Добавить синонимы" IsEnabled="{Binding SelectedSymptom}" Content="+" HorizontalContentAlignment="Center" FontFamily="Arial Black" FontSize="12" Padding="0" VerticalContentAlignment="Center" HorizontalAlignment="Left" Margin="4,38,0,0" VerticalAlignment="Top" Width="17" Height="16"/>
         </Grid>
-        <ListBox Background="#FFEBF5FF" x:Name="SynonymsList" HorizontalContentAlignment="Stretch" ItemsSource="{Binding SelectedSymptom.Synonyms}" Margin="430,101,10,10">
+        <ListBox x:Name="SynonymsList" HorizontalContentAlignment="Stretch" ItemsSource="{Binding SelectedSymptom.Synonyms}" Margin="430,101,10,10">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Grid Style="{StaticResource ListGrids}" Height="26">
@@ -187,12 +229,14 @@
             <MenuItem Margin="1" Header="Файл">
                 <MenuItem VerticalContentAlignment="Center" x:Name="OpenFile" Click="OpenFile_OnClick" Header="Открыть файл"/>
                 <MenuItem x:Name="SaveFile" Click="SaveFile_OnClick"  Header="Сохранить файл"/>
+                <MenuItem x:Name="AutoSaveLoad" Click="AutoSaveLoad_OnClick"  Header="Загрузить автосохранение"/>
             </MenuItem>
             <MenuItem Margin="1" Header="Сортировка">
                 <MenuItem x:Name="SynonymSort" Click="SynonymSort_OnClick" Header="Сортировка синонимов"/>
             </MenuItem>
-            <MenuItem Margin="1" Header="Расстановка статусов">
-                <MenuItem Click="AutoSetStatuses_OnClick" x:Name="AutoSetStatuses" Header="Авторасстановка"/>
+            <MenuItem Margin="1" Header="Авторазметка">
+                <MenuItem Click="AutoSetStatuses_OnClick" x:Name="AutoSetStatuses" Header="Авторазметка статусов"/>
+                <MenuItem Click="AutoSetDesignations_OnClick" x:Name="AutoSetDesignations" Header="Авторазметка переводов"/>
             </MenuItem>
         </Menu>
         <Grid Style="{StaticResource AdditionalGrids}" HorizontalAlignment="Left" Height="57" Margin="210,43,0,0" VerticalAlignment="Top" Width="217" >

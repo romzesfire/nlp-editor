@@ -5,13 +5,94 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NlpEditor"
         mc:Ignorable="d"
-        Title="AddSynonyms" Height="450" Width="800">
-    <Grid>
+        Title="Добавление синонимов" Height="450" Width="800">
+    <Window.Resources>
+        <Style TargetType="Button" >
+            <Setter Property="BorderBrush" Value="#A65F00"/>
+            <Setter Property="Background" Value="#BF8230"/>
+            <Setter Property="Foreground" Value="#090974"></Setter>
+            <Style.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="5" />
+                </Style>
+            </Style.Resources>
+        </Style>
+        <Style TargetType="MenuItem" >
+            <Setter Property="BorderBrush" Value="#A65F00"/>
+            <Setter Property="Background" Value="#BF8230"/>
+            <Setter Property="Foreground" Value="#090974"></Setter>
+            <Style.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="5" />
+                </Style>
+            </Style.Resources>
+        </Style>
+        <Style TargetType="Menu">
+            <Setter Property="Background" Value="#FFE5A856" ></Setter>
+        </Style>
+        <Style TargetType="TextBox" >
+            <Style.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="5" />
+                </Style>
+            </Style.Resources>
+        </Style>
+        <Style TargetType="TreeView" >
+            <Style.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="5" />
+                    <Setter Property="Background" Value="#FFEBF5FF" />
+                </Style>
+            </Style.Resources>
+        </Style>
+        <Style TargetType="ListBox" >
+            <Setter Property="BorderBrush" Value="SaddleBrown"></Setter>
+            <Style.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="5" />
+                </Style>
+
+            </Style.Resources>
+        </Style>
+        <Style TargetType="TextBlock" x:Key="TextBlockMain">
+            <Setter Property="Foreground" Value="#090974"></Setter>
+        </Style>
+        <Style TargetType="TextBlock" x:Key="TextBlockLists">
+            <Setter Property="Foreground" Value="Black"></Setter>
+        </Style>
+        <Style TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#090974"></Setter>
+        </Style>
+        <Style TargetType="ScrollViewer" >
+            
+            <Style.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="BorderBrush" Value="SaddleBrown"/>
+                    <Setter Property="BorderThickness" Value="1"></Setter>
+                    <Setter Property="Background" Value="#FFEBF5FF"></Setter>
+                    <Setter Property="CornerRadius" Value="5" />
+                </Style>
+            </Style.Resources>
+        </Style>
+        <Style x:Key="ListGrids" TargetType="Grid" >
+
+            <Style.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="Background" Value="#FFA3CFF7"/>
+                    <Setter Property="CornerRadius" Value="5" />
+                </Style>
+            </Style.Resources>
+        </Style>
+    </Window.Resources>
+    <Grid Background="#FFC373">
         <ScrollViewer Margin="10,36,10,10" Name="ScrollViewer1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" CanContentScroll="True">
-            <ItemsControl ItemsSource="{Binding Synonyms}" x:Name="tStack"  Background="#FFCECECE" >
+            <Border>
+            <ItemsControl  ItemsSource="{Binding Synonyms}" x:Name="tStack" >
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <StackPanel CanVerticallyScroll="True" Orientation="Vertical"  CanHorizontallyScroll="True"/>
+                        <StackPanel CanVerticallyScroll="True" Orientation="Vertical"  CanHorizontallyScroll="True">
+                            
+                            </StackPanel>
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
@@ -20,9 +101,10 @@
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
+            </Border>
         </ScrollViewer>
         <Button x:Name="ClipboardButton" Click="ClipboardButton_OnClick" Content="Вставить из буфера обмена" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="164"/>
-        <Button x:Name="OkButton" Click="OkButton_OnClick" Content="OK" HorizontalAlignment="Left" Margin="753,10,0,0" VerticalAlignment="Top" Width="37"/>
+        <Button x:Name="OkButton" Click="OkButton_OnClick" Content="OK" HorizontalAlignment="Right" Margin="0,10,10,0" VerticalAlignment="Top" Width="37"/>
 
 
     </Grid>

@@ -14,6 +14,8 @@ using NlpEditor.DI;
 using NlpEditor.Model;
 using NlpEditor.Source;
 using NlpEditor.Utils;
+using Brush = System.Windows.Media.Brush;
+using Color = System.Windows.Media.Color;
 
 namespace NlpEditor.ViewModel
 {
@@ -23,10 +25,10 @@ namespace NlpEditor.ViewModel
         private string _code;
         private string _value;
         private string _name;
+        private Brush _selectedStatusColor;
         private ImageSource _genderImage;
         public Status _selectedStatus;
         public Gender _selectedGender;
-        
         public string Id;
         public ImageSource GenderImage
         {
@@ -77,6 +79,19 @@ namespace NlpEditor.ViewModel
                 OnPropertyChanged();
             }
         }
+
+        public Brush SelectedStatusColor
+        {
+            get
+            {
+                return _selectedStatusColor;
+            }
+            set
+            {
+                _selectedStatusColor = value;
+                OnPropertyChanged();
+            }
+        }
         public Status SelectedStatus
         {
             get
@@ -87,6 +102,12 @@ namespace NlpEditor.ViewModel
             {
                 _selectedStatus = value;
                 SymptomReference.Status = value;
+                if (value == Status.Active)
+                    SelectedStatusColor = Resources.Resources.ActiveColor;
+                else if (value == Status.Inactive)
+                    SelectedStatusColor = Resources.Resources.InactiveColor;
+                else
+                    SelectedStatusColor = Resources.Resources.DraftColor;
                 OnPropertyChanged();
             }
         }
@@ -153,19 +174,20 @@ namespace NlpEditor.ViewModel
             {
                 SymptomReference.Synonyms.Add(newSynonym);
                 Synonyms.Add(new SynonymViewModel(newSynonym));
+                SymptomsSource.AutoSave();
             }
         }
         public void RemoveSynonym(SynonymViewModel synonym)
         {
             SymptomReference.Synonyms.Remove(synonym.SynonymReference);
             Synonyms.Remove(synonym);
+            SymptomsSource.AutoSave();
         }
         public void RemoveSynonym(string synonym)
         {
             var toRemove = Synonyms.FirstOrDefault(s => s.Name == synonym);
             if(toRemove != null)
                 RemoveSynonym(toRemove);
-
         }
 
 

@@ -84,11 +84,11 @@ namespace NlpEditor.View
                 if (duplicate.Item2.SymptomsReference.Count == 1 && duplicate.Item2.SymptomsReference.First().Id == symptom.SymptomReference.Id)
                     return;
 
-                var duplicateWidow =
+                var duplicateWindow =
                     new DuplicatesWindow(new DuplicatesWindowViewModel(new DuplicateSynonyms(duplicate.Item2),
                         _viewModel.MainWindowViewModel));
 
-                duplicateWidow.ShowDialog();
+                duplicateWindow.ShowDialog();
             }
         }
 
@@ -132,7 +132,8 @@ namespace NlpEditor.View
                     preparedSynonyms.AddRange(synonyms.Select(s => new SynonymViewModel(new Synonym(s))));
                     foreach (var duplicate in result)
                     {
-                        preparedSynonyms.Remove(preparedSynonyms.FirstOrDefault(s=>s.Name == duplicate.Item2.Synonym.Name));
+                        if(duplicate.Item1)
+                            preparedSynonyms.Remove(preparedSynonyms.FirstOrDefault(s=>s.Name == duplicate.Item2.Synonym.Name));
                     }
                     
                 }
@@ -155,8 +156,20 @@ namespace NlpEditor.View
             var adderModel = new AddNewSymptomViewModel() { Name = name };
             var adder = new AddNewSymptom(adderModel);
             adder.ShowDialog();
-            var symptom = adderModel.ConvertToSymptom();
-            _viewModel.MainWindowViewModel.AddSymptomToArea(symptom, symptom.SymptomReference.Area);
+            if (!adderModel.IsCanceled!)
+            {
+                var symptom = adderModel.ConvertToSymptom();
+                _viewModel.MainWindowViewModel.AddSymptomToArea(symptom, symptom.SymptomReference.Area);
+                _viewModel.Symptoms.Add(symptom);
+                _viewModel.Synonyms.Remove(_viewModel.Synonyms.FirstOrDefault(s => s.Name == name));
+                _viewModel.SymptomReference.RemoveSynonym(name);
+            }
+        }
+
+        private void RemoveSynonymButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            var synonym = (SynonymViewModel) ((Button) sender).Tag;
+            _viewModel.RemoveSynonym(synonym);
         }
     }
 }

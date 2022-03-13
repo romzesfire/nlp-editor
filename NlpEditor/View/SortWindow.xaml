@@ -7,40 +7,115 @@
         mc:Ignorable="d" 
         Title="Сортировка" Height="450" Width="800">
     <Window.Resources>
+        <Style TargetType="Button" >
+            <Setter Property="BorderBrush" Value="#A65F00"/>
+            <Setter Property="Background" Value="#BF8230"/>
+            <Setter Property="Foreground" Value="#090974"></Setter>
+            <Style.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="5" />
+                </Style>
+            </Style.Resources>
+        </Style>
+        <Style TargetType="MenuItem" >
+            <Setter Property="BorderBrush" Value="#A65F00"/>
+            <Setter Property="Background" Value="#BF8230"/>
+            <Setter Property="Foreground" Value="#090974"></Setter>
+            <Style.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="5" />
+                </Style>
+            </Style.Resources>
+        </Style>
+        <Style TargetType="Menu">
+            <Setter Property="Background" Value="#FFE5A856" ></Setter>
+        </Style>
+        <Style TargetType="TextBox" >
+            <Style.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="5" />
+                </Style>
+            </Style.Resources>
+        </Style>
+        <Style TargetType="TreeView" >
+            <Style.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="5" />
+                    <Setter Property="Background" Value="#FFEBF5FF" />
+                </Style>
+            </Style.Resources>
+        </Style>
+        <Style TargetType="ListBox" >
+            <Setter Property="BorderBrush" Value="SaddleBrown"></Setter>
+            <Setter Property="Background" Value="#FFEBF5FF"></Setter>
+            <Style.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="5" />
+                </Style>
 
+            </Style.Resources>
+        </Style>
+        <Style TargetType="TextBlock" x:Key="TextBlockMain">
+            <Setter Property="Foreground" Value="#090974"></Setter>
+        </Style>
+        <Style TargetType="TextBlock" x:Key="TextBlockLists">
+            <Setter Property="Foreground" Value="Black"></Setter>
+        </Style>
+        <Style TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#090974"></Setter>
+        </Style>
+        <Style x:Key="AdditionalGrids" TargetType="Grid" >
+            <Style.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="BorderBrush" Value="SaddleBrown"/>
+                    <Setter Property="BorderThickness" Value="1"></Setter>
+                    <Setter Property="Background" Value="#FFAD40"/>
+                    <Setter Property="CornerRadius" Value="5" />
+                </Style>
+            </Style.Resources>
+        </Style>
+        <Style x:Key="ListGrids" TargetType="Grid" >
+
+            <Style.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="Background" Value="#FFA3CFF7"/>
+                    <Setter Property="CornerRadius" Value="5" />
+                </Style>
+            </Style.Resources>
+        </Style>
     </Window.Resources>
-    <Grid>
-        <ListBox x:Name="SymptomsToSelectList" Margin="15,45,0,10" ItemsSource="{Binding SymptomsView}" HorizontalContentAlignment="Left" HorizontalAlignment="Left" Width="217">
+    <Grid Background="#FFC373">
+        <ListBox x:Name="SymptomsToSelectList" Margin="10,45,0,10" ItemsSource="{Binding SymptomsView}" HorizontalContentAlignment="Left" HorizontalAlignment="Left" Width="217">
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <Grid AllowDrop="True" Drop="SymptomGrid_OnDrop" x:Name="SymptomGrid" Tag="{Binding}" Width="188" MaxWidth="{Binding Width, ElementName=SymptomsToSelectList}"  Height="109" >
-                        <Border Background="#FF737CE4" CornerRadius="5"/>
+                    <Grid Style="{StaticResource ListGrids}" AllowDrop="True" Drop="SymptomGrid_OnDrop" x:Name="SymptomGrid" Tag="{Binding}" Width="188" MaxWidth="{Binding Width, ElementName=SymptomsToSelectList}"  Height="109" >
+                        <Border />
                         <Image Margin="121,3,33,92" Source="{Binding GenderImage, Mode=TwoWay}"/>
                         <TextBlock TextWrapping="Wrap" FontSize="10"  Text="Код" Margin="10,9,0,85" HorizontalAlignment="Left" />
                         <TextBlock TextWrapping="Wrap" FontSize="10"  Text="Значение" Margin="10,34,0,60" HorizontalAlignment="Left" />
-                        <TextBox AcceptsReturn="True" AcceptsTab="True" x:Name="SymptomCode" TextWrapping="Wrap" Text="{Binding Code}" FontSize="10" VerticalContentAlignment="Center" Margin="10,22,10,73"/>
+                        <TextBox IsReadOnly="True" AcceptsReturn="True" AcceptsTab="True" x:Name="SymptomCode" TextWrapping="Wrap" Text="{Binding Code}" FontSize="10" VerticalContentAlignment="Center" Margin="10,22,10,73"/>
 
-                        <TextBox AcceptsReturn="True" AcceptsTab="True" x:Name="SymptomValue" TextWrapping="Wrap" Text="{Binding Value}" FontSize="10" VerticalContentAlignment="Center" Margin="10,47,10,48"/>
-                        <TextBox AcceptsReturn="True" AcceptsTab="True" x:Name="SymptomName" TextWrapping="WrapWithOverflow" Text="{Binding Name}" Margin="10,63,10,5" />
+                        <TextBox IsReadOnly="True" AcceptsReturn="True" AcceptsTab="True" x:Name="SymptomValue" TextWrapping="Wrap" Text="{Binding Value}" FontSize="10" VerticalContentAlignment="Center" Margin="10,47,10,48"/>
+                        <TextBox IsReadOnly="True" AcceptsReturn="True" AcceptsTab="True" x:Name="SymptomName" TextWrapping="WrapWithOverflow" Text="{Binding Name}" Margin="10,63,10,5" />
                     </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <Grid HorizontalAlignment="Left" Height="35" Margin="15,10,0,0" VerticalAlignment="Top" Width="217" Background="WhiteSmoke">
+        <Grid Style="{StaticResource AdditionalGrids}" HorizontalAlignment="Left" Height="35" Margin="10,8,0,0" VerticalAlignment="Top" Width="217" >
+            <Border></Border>
             <TextBox x:Name="FindTextField" HorizontalAlignment="Left" Margin="3,4,0,0" TextWrapping="Wrap" FontSize="9" VerticalAlignment="Top" Width="181" Height="27"/>
             <Button HorizontalAlignment="Left" Click="Find_OnClick" Margin="188,6,0,0" VerticalAlignment="Top" Width="24" Height="23" >
                 <Image Source="{Binding FindImage}"/>
             </Button>
         </Grid>
-        <ListBox  HorizontalContentAlignment="Stretch" ItemsSource="{Binding Synonyms}"  Margin="237,46,10,10">
-
+        <ListBox  HorizontalContentAlignment="Stretch" ItemsSource="{Binding Synonyms}"  Margin="231,45,10,10">
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <Grid x:Name="SynonymGrid" Height="30" Tag="{Binding}" MouseLeftButtonDown="Synonym_OnMouseDown">
-                        <Border Background="#FF737CE4" CornerRadius="5">
+                    <Grid Style="{StaticResource ListGrids}" x:Name="SynonymGrid" Height="30" Tag="{Binding}" MouseLeftButtonDown="Synonym_OnMouseDown">
+                        <Border >
                         </Border>
-                        <TextBox x:Name="SynonymText" AcceptsReturn="True" AcceptsTab="True"  Tag="{Binding}" Text="{Binding Path=Name}" Margin="30,4,21,4" />
-                        <Button x:Name="RemoveSynonymButton" ToolTip="Удалить"  Tag="{Binding}" FontSize="8" Content="X" FontFamily="Arial Black" Background="#FF5259C1" BorderBrush="#FF002CB5" HorizontalAlignment="Right" Width="21" >
+                        <TextBox x:Name="SynonymText" AcceptsReturn="True" AcceptsTab="True"  Tag="{Binding}" Text="{Binding Path=Name}" Margin="30,4,22,4" />
+                        <Button x:Name="RemoveSynonymButton" Click="RemoveSynonymButton_OnClick" ToolTip="Удалить"  Tag="{Binding}" FontSize="8" Content="X" FontFamily="Arial Black" Background="#FF5259C1" BorderBrush="#FF002CB5" Margin="0,6,1,6" HorizontalAlignment="Right" Width="20" >
                             <Button.Resources>
                                 <Style TargetType="Border">
                                     <Setter Property="CornerRadius" Value="5"/>
@@ -57,7 +132,7 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <Button Content="Вставить из буфера обмена" Click="SynonymsFromClipboard_OnClick" HorizontalAlignment="Left" Margin="237,23,0,0" VerticalAlignment="Top"/>
+        <Button Content="Вставить из буфера обмена" Click="SynonymsFromClipboard_OnClick" HorizontalAlignment="Left" Margin="231,23,0,0" VerticalAlignment="Top" Width="161"/>
 
     </Grid>
 </Window>

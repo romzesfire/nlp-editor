@@ -103,9 +103,10 @@ namespace NlpEditor.ViewModel
             FindImage = Resources.Resources.FindImage;
         }
 
-        public IEnumerable<string> GetNonRootAreas()
+        public Dictionary<string, ObservableCollection<SymptomViewModel>> GetNonRootAreas()
         {
-            return _symptomList.Keys.Where(a => a != "All");
+            return _symptomList.Where(a => a.Key != "All")
+                .ToDictionary(k=>k.Key, v=>v.Value);
         }
         public ObservableCollection<SymptomViewModel> GetAllSymptoms()
         {
@@ -124,7 +125,12 @@ namespace NlpEditor.ViewModel
         {
             source.Remove(symptom.SymptomReference);
             var collectionSymptom = _symptomList[symptom.SymptomReference.Area];
+            if (SelectedArea == "All")
+                SymptomsToSelect.Remove(symptom);
+            
             collectionSymptom.Remove(collectionSymptom.First(s => s.Id == symptom.Id));
+
+            SymptomsSource.AutoSave();
         }
         public void SetSelectedSymptom(SymptomViewModel symptom)
         {
@@ -167,11 +173,14 @@ namespace NlpEditor.ViewModel
         {
             if (SymptomsToSelect != null)
             {
-                SymptomsToSelect = new ObservableCollection<SymptomViewModel>(SymptomsToSelect.Where(s => s.Name.Contains(pattern)
-                                                                                                                     || (s.Code != null && s.Code.Contains(pattern))
-                                                                                                                     || (s.Value != null && s.Value.Contains(pattern))
-                                                                                                                     || s.Synonyms.FirstOrDefault(syn =>
-                                                                                                                         syn.Name.Contains(pattern)) != null));
+                SymptomsToSelect = 
+                    new ObservableCollection<SymptomViewModel>(SymptomsToSelect.Where(s 
+                        => s.Name.Contains(pattern) || (s.Code != null && s.Code.ToLower().Contains(pattern.ToLower()))
+                                                    || (s.Value != null && s.Value.ToLower().Contains(pattern.ToLower()))
+                                                    || s.SelectedGender.ToString().ToLower() == pattern.ToLower()
+                                                    || s.SelectedStatus.ToString().ToLower() == pattern.ToLower()
+                                                    || s.Synonyms.FirstOrDefault(syn =>
+                                                        syn.Name.ToLower().Contains(pattern.ToLower())) != null));
             }
         }
 
@@ -179,13 +188,16 @@ namespace NlpEditor.ViewModel
         {
             if (area != "All")
             {
+                var oldArea = symptom.SymptomReference.Area;
+                _symptomList[oldArea].Remove(symptom);
                 _symptomList[area].Add(symptom);
+                
                 symptom.SymptomReference.Area = area;
-
                 if (SymptomsSource.Symptoms.FirstOrDefault(s => s.Id == symptom.SymptomReference.Id) == null)
                 {
-                    SymptomsSource.Symptoms.AddSymptom(symptom.SymptomReference);
+                    SymptomsSource.Add(symptom.SymptomReference);
                 }
+                SymptomsSource.AutoSave();
             }
         }
         public ObservableCollection<SymptomViewModel> GetSymptomsByArea(string area)

@@ -5,8 +5,85 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NlpEditor.View"
         mc:Ignorable="d"
-        Title="AddNewSymptom" Height="264" Width="469" WindowStartupLocation="CenterScreen" ShowInTaskbar="False" ResizeMode="NoResize">
-    <Grid>
+        Title="Добавление нового симптома" Height="264" Width="469" WindowStartupLocation="CenterScreen" ShowInTaskbar="False" ResizeMode="NoResize">
+    <Window.Resources>
+        <Style TargetType="Button" >
+            <Setter Property="BorderBrush" Value="#A65F00"/>
+            <Setter Property="Background" Value="#BF8230"/>
+            <Setter Property="Foreground" Value="#090974"></Setter>
+            <Style.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="5" />
+                </Style>
+            </Style.Resources>
+        </Style>
+        <Style TargetType="MenuItem" >
+            <Setter Property="BorderBrush" Value="#A65F00"/>
+            <Setter Property="Background" Value="#BF8230"/>
+            <Setter Property="Foreground" Value="#090974"></Setter>
+            <Style.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="5" />
+                </Style>
+            </Style.Resources>
+        </Style>
+        <Style TargetType="Menu">
+            <Setter Property="Background" Value="#FFE5A856" ></Setter>
+        </Style>
+        <Style TargetType="TextBox" >
+            <Style.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="5" />
+                </Style>
+            </Style.Resources>
+        </Style>
+        <Style TargetType="TreeView" >
+            <Style.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="5" />
+                    <Setter Property="Background" Value="#FFEBF5FF" />
+                </Style>
+            </Style.Resources>
+        </Style>
+        <Style TargetType="ListBox" >
+            <Setter Property="BorderBrush" Value="SaddleBrown"></Setter>
+            <Style.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="5" />
+                </Style>
+
+            </Style.Resources>
+        </Style>
+        <Style TargetType="TextBlock" x:Key="TextBlockMain">
+            <Setter Property="Foreground" Value="#090974"></Setter>
+        </Style>
+        <Style TargetType="TextBlock" x:Key="TextBlockLists">
+            <Setter Property="Foreground" Value="Black"></Setter>
+        </Style>
+        <Style TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#090974"></Setter>
+        </Style>
+        <Style x:Key="AdditionalGrids" TargetType="Grid" >
+            <Style.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="BorderBrush" Value="SaddleBrown"/>
+                    <Setter Property="BorderThickness" Value="1"></Setter>
+                    <Setter Property="Background" Value="#FFAD40"/>
+                    <Setter Property="CornerRadius" Value="5" />
+                </Style>
+            </Style.Resources>
+        </Style>
+        <Style x:Key="ListGrids" TargetType="Grid" >
+
+            <Style.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="Background" Value="#FFA3CFF7"/>
+                    <Setter Property="CornerRadius" Value="5" />
+                </Style>
+            </Style.Resources>
+        </Style>
+    </Window.Resources>
+    <Grid Background="#FFC373">
         <TextBox Margin="0,25,0,0" FontSize="14" TextWrapping="Wrap" Text="{Binding Code}" VerticalAlignment="Top" Height="23" HorizontalAlignment="Center" Width="439"/>
         <TextBox Margin="0,76,0,0" FontSize="14" TextWrapping="Wrap" Text="{Binding Value}" VerticalAlignment="Top" Height="23" HorizontalAlignment="Center" Width="439"/>
         <TextBlock HorizontalAlignment="Left" FontSize="14" Margin="15,3,0,0" TextWrapping="Wrap" Text="Код" Height="19" VerticalAlignment="Top"/>

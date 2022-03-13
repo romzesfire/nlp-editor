@@ -14,11 +14,11 @@ using OfficeOpenXml;
 
 namespace NlpEditor.Utils
 {
-    public class NlpFileFromFileLoader : INlpFileLoader
+    public class NlpFileFromExcelLoader : INlpFileLoader
     {
         private Symptoms _symptoms { get; set; }
         private NlpConfiguration _config { get; set; }
-        public NlpFileFromFileLoader(IOptions<NlpConfiguration> config)
+        public NlpFileFromExcelLoader(IOptions<NlpConfiguration> config)
         {
             _symptoms = new Symptoms();
             _config = config.Value;

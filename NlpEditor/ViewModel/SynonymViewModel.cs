@@ -41,6 +41,7 @@ namespace NlpEditor.ViewModel
                 _name = value;
                 OnPropertyChanged();
                 SynonymReference.Name = value;
+                
             }
         }
         public Synonym SynonymReference { get; set; }

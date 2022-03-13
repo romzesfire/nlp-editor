@@ -12,15 +12,15 @@ using OfficeOpenXml;
 
 namespace NlpEditor.Utils
 {
-    public class NlpToFileSaver : INlpSaver
+    public class NlpToExcelSaver : INlpSaver
     {
         private NlpConfiguration _config;
-        public NlpToFileSaver(IOptions<NlpConfiguration> config)
+        public NlpToExcelSaver(IOptions<NlpConfiguration> config)
         {
             _config = config.Value;
         }
 
-        public void SaveXlsxFile(string fileName, Symptoms symptomsToSave)
+        public void SaveFile(string fileName, Symptoms symptomsToSave)
         {
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
             var file = new FileInfo(fileName);
@@ -59,6 +59,6 @@ namespace NlpEditor.Utils
 
     public interface INlpSaver
     {
-        public void SaveXlsxFile(string fileName, Symptoms symptomsToSave);
+        public void SaveFile(string fileName, Symptoms symptomsToSave);
     }
 }

@@ -5,6 +5,7 @@
     <TargetFramework>net6.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>neuron.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -19,11 +20,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="neuron.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="Model\SymptomsBase.cs" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="EPPlus" Version="5.8.7" />
+    <PackageReference Include="Google.Apis.Sheets.v4" Version="1.56.0.2608" />
     <PackageReference Include="Medzoom.CDSS.Common.Constants" Version="1.2.0" />
     <PackageReference Include="Medzoom.CDSS.DTO" Version="6.3.2" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.2.0" />
@@ -41,7 +47,13 @@
     <None Update="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="credentials.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="License.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="neuron.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

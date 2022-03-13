@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -15,6 +16,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Medzoom.CDSS.Common.Constants;
+using Medzoom.CDSS.DTO;
 using Microsoft.Win32;
 using Newtonsoft.Json;
 using NlpEditor.Configuration;
@@ -82,18 +85,24 @@ namespace NlpEditor
 
         private void OpenFile_OnClick(object sender, RoutedEventArgs e)
         {
-            var loader = Services.GetService<INlpFileLoader>();
-
             OpenFileDialog dialog = new OpenFileDialog();
-            dialog.Filter = "xlsx files (*.xlsx)|*.xlsx";
+            dialog.Filter = "xlsx files (*.xlsx)|*.xlsx|nlps file (*.nlps)|*.nlps";
             dialog.Title = "Выберите файл с симптомами NLP";
 
             if (dialog.ShowDialog() == false)
                 return;
+            OpenNlpSymptoms(dialog.FileName);
+        }
 
-            loader.Load(dialog.FileName);
+        public void OpenNlpSymptoms(string fileName)
+        {
+            var loaders = Services.GetServices<INlpFileLoader>();
+            INlpFileLoader loader =
+                fileName.EndsWith("xlsx") ? loaders.OfType<NlpFileFromExcelLoader>().First() : loaders.OfType<NlpFromNlpsLoader>().First();
+
+            loader.Load(fileName);
             ViewModel = new MainWindowViewModel(SymptomsSource.Symptoms);
-            AreasTree.ItemsSource = new AreasTreeViewModel[] { new AreasTreeViewModel(ViewModel.GetNonRootAreas())};
+            AreasTree.ItemsSource = new AreasTreeViewModel[] { new AreasTreeViewModel(ViewModel.GetNonRootAreas()) };
 
             DataContext = ViewModel;
 
@@ -186,10 +195,14 @@ namespace NlpEditor
                     }
                     else
                     {
+                        var toRemoveDup = new List<string>();
                         foreach (var duplicate in result)
                         {
-                            lines.Remove(duplicate.Item2.Synonym.Name);
+                            if(duplicate.Item1)
+                                toRemoveDup.Add(duplicate.Item2.Synonym.Name);
+                                
                         }
+                        lines.RemoveAll(s=> toRemoveDup.Contains(s));
                         ViewModel.SelectedSymptom.AddSynonyms(lines);
                     }
                 }
@@ -229,13 +242,13 @@ namespace NlpEditor
             }
             if (ViewModel.SelectedSymptom != null 
                 && symptom.Code == ViewModel.SelectedSymptom.Code 
-                && symptom.Value == ViewModel.SelectedSymptom.Value)
+                && symptom.Value == ViewModel.SelectedSymptom.Value) 
                 ViewModel.SetSelectedSymptom(null);
 
             if (area != symptom.SymptomReference.Area)
             {
+                var symptomsFromRemove = ViewModel.GetSymptomsByArea(symptom.SymptomReference.Area);
                 ViewModel.AddSymptomToArea(symptom, area);
-                ViewModel.SymptomsToSelect.Remove(symptom);
             }
 
         }
@@ -254,21 +267,45 @@ namespace NlpEditor
 
         private void UIElement_OnLostFocus(object sender, RoutedEventArgs e)
         {
-            var synonym = (SynonymViewModel)((TextBox) sender).Tag;
+            var textBox = (TextBox)sender;
+            
+            var synonym = (SynonymViewModel)textBox.Tag;
+
             var (hasDuplicate, duplicate) = _checker.GetDuplicatesByOneSynonym(synonym.SynonymReference, SymptomsSource.Symptoms);
             var find = ViewModel.SelectedSymptom.Synonyms.Where(s => s.Name == synonym.Name);
             if (find.Count() > 1)
             {
-                MessageBox.Show($"Синоним {synonym.Name} уже существует в этом симптоме и будет удален");
-                ViewModel.SelectedSymptom.RemoveSynonym(synonym);
+                MessageBox.Show($"Синоним {synonym.Name} уже существует в этом симптоме");
+                UndoAll(textBox);
+                synonym.Name = textBox.Text;
+                //ViewModel.SelectedSymptom.RemoveSynonym(synonym);
             }
+            SymptomsSource.AutoSave();
             if (hasDuplicate)
             {
-                var duplicateWindow =
-                    new DuplicatesWindow(new DuplicatesWindowViewModel(new DuplicateSynonyms(duplicate), ViewModel));
-                duplicateWindow.ShowDialog();
+                var result = MessageBox.Show($"Найдены дубликаты синонима {synonym.Name}. Отменить изменения?", "Дубликат", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                if (result == MessageBoxResult.Yes)
+                {
+                    UndoAll(textBox);
+                    synonym.Name = textBox.Text;
+                }
+                else
+                {
+                    var duplicateWindow =
+                        new DuplicatesWindow(new DuplicatesWindowViewModel(new DuplicateSynonyms(duplicate),
+                            ViewModel));
+                    duplicateWindow.ShowDialog();
+                }
             }
 
+        }
+
+        private void UndoAll(TextBox textBox)
+        {
+            while (textBox.CanUndo)
+            {
+                textBox.Undo();
+            }
         }
 
         private void SynonymChecker_OnChecked(object sender, RoutedEventArgs e)
@@ -283,7 +320,7 @@ namespace NlpEditor
 
         private void SelectAllMenu_OnClick(object sender, RoutedEventArgs e)
         {
-            if (ViewModel != null && ViewModel.SymptomsToSelect != null)
+            if (ViewModel != null && ViewModel.SelectedSymptom != null)
             {
                 foreach (var synonym in ViewModel.SelectedSymptom.Synonyms)
                 {
@@ -294,7 +331,7 @@ namespace NlpEditor
 
         private void DeselectAllMenu_OnClick(object sender, RoutedEventArgs e)
         {
-            if (ViewModel != null && ViewModel.SymptomsToSelect != null)
+            if (ViewModel != null && ViewModel.SelectedSymptom != null)
             {
                 foreach (var synonym in ViewModel.SelectedSymptom.Synonyms)
                 {
@@ -305,7 +342,7 @@ namespace NlpEditor
 
         private void RemoveSelectedMenu_OnClick(object sender, RoutedEventArgs e)
         {
-            if (ViewModel != null && ViewModel.SymptomsToSelect != null)
+            if (ViewModel != null && ViewModel.SelectedSymptom != null)
             {
                 var toRemove = ViewModel.SelectedSymptom.Synonyms.Where(s => s.IsChecked);
                 ViewModel.SelectedSymptom.RemoveSynonyms(toRemove);
@@ -333,7 +370,7 @@ namespace NlpEditor
                 var viewModel = new AddNewSymptomViewModel();
                 var addSymptomWindow = new AddNewSymptom(viewModel);
                 addSymptomWindow.ShowDialog();
-                if (viewModel.SymptomViewModel != null)
+                if (viewModel.SymptomViewModel != null && !viewModel.IsCanceled)
                 {
                     ViewModel.AddSymptomToArea(viewModel.SymptomViewModel, viewModel.Area);
                 }
@@ -369,12 +406,38 @@ namespace NlpEditor
         private void SaveFile_OnClick(object sender, RoutedEventArgs e)
         {
             //var saveChecker = ;
-            var saver = Services.GetService<INlpSaver>();
+            var savers = Services.GetServices<INlpSaver>();
             SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.Filter = "xlsx files (*.xlsx)|*.xlsx";
+            saveFileDialog.Filter = "xlsx files (*.xlsx)|*.xlsx|Nlp json file (*.json)|*.json|Nlps file (*.nlps)|*.nlps";
             if(saveFileDialog.ShowDialog() == false)
                 return;
-            saver.SaveXlsxFile(saveFileDialog.FileName, SymptomsSource.Symptoms);
+
+            var filename = saveFileDialog.FileName;
+            if (filename.EndsWith(".json"))
+            {
+                if (SymptomsSource.Symptoms.Any(s => s.Status == Status.Draft))
+                {
+                    MessageBox.Show(
+                        "Для того чтобы сохранить файл в этом формате, ни один синоним не должен быть в статусе \"Draft\". " +
+                        "Исправьте статусы или сохраните в другом формате.", 
+                        "Неверные статусы", MessageBoxButton.OK, MessageBoxImage.Error);
+
+                    return;
+                }
+                INlpSaver saver = savers.OfType<NlpToJsonSaver>().First();
+                saver.SaveFile(filename, SymptomsSource.Symptoms);
+            }
+            else if (filename.EndsWith(".nlps"))
+            {
+                INlpSaver saver = savers.OfType<NlpToNlpsSaver>().First();
+                saver.SaveFile(filename, SymptomsSource.Symptoms);
+            }
+            else if(filename.EndsWith(".xlsx"))
+            {
+                INlpSaver saver = savers.OfType<NlpToExcelSaver>().First();
+                saver.SaveFile(filename, SymptomsSource.Symptoms);
+            }
+            
         }
 
         private void CodeField_OnLostFocus(object sender, RoutedEventArgs e)
@@ -389,6 +452,7 @@ namespace NlpEditor
                 if (CodesConverter.IsCode(code))
                 {
                     symptom.SymptomReference.Code = CodesConverter.ShortToCoding(code);
+                    SymptomsSource.AutoSave();
                 }
                 else
                 {
@@ -401,6 +465,7 @@ namespace NlpEditor
                     {
                         textBox.Text = CodesConverter.CodingToShort(symptom.SymptomReference.Code);
                     }
+
                 }
             }
         }
@@ -417,10 +482,12 @@ namespace NlpEditor
                 if (CodesConverter.IsCode(code))
                 {
                     symptom.SymptomReference.Value = CodesConverter.ShortToCoding(code);
+                    SymptomsSource.AutoSave();
                 }
                 else if (code == null || code == "")
                 {
                     textBox.Text = "";
+                    SymptomsSource.AutoSave();
                 }
                 else
                 {
@@ -442,6 +509,7 @@ namespace NlpEditor
             if (ViewModel != null && ViewModel.SelectedSymptom != null)
             {
                 var name = ((TextBox) sender).Text;
+                SymptomsSource.AutoSave();
             }
         }
 
@@ -451,12 +519,14 @@ namespace NlpEditor
             if (ViewModel != null)
             {
                 var allSymptoms = ViewModel.GetAllSymptoms();
-                var netProvider = Services.GetService<INetworkProvider>();
-                if(allSymptoms == null)
+                if (allSymptoms == null)
                     return;
+
+                var netProvider = Services.GetService<INetworkProvider>();
+                
                 OpenFileDialog openYamlDialog = new OpenFileDialog();
                 openYamlDialog.Filter = "YAML.xdsl file|*.xdsl";
-                openYamlDialog.Title = "Выберите YAMl файл";
+                openYamlDialog.Title = "Выберите YAML файл";
 
                 if(openYamlDialog.ShowDialog() == false)
                     return;
@@ -485,7 +555,79 @@ namespace NlpEditor
                         symptom.SelectedStatus = Status.Inactive;
                     }
                 }
+                SymptomsSource.AutoSave();
             }
+        }
+
+        private void RemoveSymptom_OnClick(object sender, RoutedEventArgs e)
+        {
+            var symptom = (SymptomViewModel)((Button)sender).Tag;
+            var result = MessageBox.Show($"Вы действительно хотите удалить симптом \"{symptom.Name}\"?", 
+                "Подтверждение удаления", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+            if (result == MessageBoxResult.Yes)
+                ViewModel.RemoveSymptom(symptom, SymptomsSource.Symptoms);
+            
+        }
+
+        private void AutoSetDesignations_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (ViewModel != null && SymptomsSource.Symptoms != null && SymptomsSource.Symptoms.Any())
+            {
+                var yes = "SCTID373066001";
+                var result =
+                    MessageBox.Show(
+                        "Разметить переводы для симптомов, не содержащих код \"Да\" в формате \"Перевод кода 1: перевод кода 2\"?",
+                        "Авторазметка", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                var symptoms = ViewModel.GetAllSymptoms();
+                if (symptoms.Any())
+                {
+                    if (result == MessageBoxResult.No)
+                        symptoms = new ObservableCollection<SymptomViewModel>(symptoms.Where(s => s.Value == yes));
+
+                    foreach (var symptom in symptoms)
+                    {
+                        SetDesignationForSymptom(symptom);
+                    }
+
+                    SymptomsSource.AutoSave();
+                }
+            }
+        }
+
+        private void SetDesignationForSymptom(SymptomViewModel symptom)
+        {
+            if (symptom.Code != null && symptom.Code != "")
+            {
+                var yes = "SCTID373066001";
+                var provider = Services.GetService<IDesignationsProvider>();
+                if (symptom.Value == null || symptom.Value == "")
+                {
+                    symptom.Name = provider.GetDesignation(symptom.Code, symptom.Name) + " :";
+                }
+                else if (symptom.Value == yes)
+                {
+                    symptom.Name = provider.GetDesignation(symptom.Code, symptom.Name);
+                }
+                else
+                {
+                    symptom.Name = provider.GetDesignation(symptom.Code, symptom.Name) + " : " + provider.GetDesignation(symptom.Value, "");
+                }
+
+            }
+        }
+
+        private void AutoSaveLoad_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (File.Exists(Services.Configuration.General.AutoSaveFileName))
+                OpenNlpSymptoms(Services.Configuration.General.AutoSaveFileName);
+            else
+                MessageBox.Show("Файл автосохранения не найден!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+
+        private void MainWindow_OnClosing(object? sender, CancelEventArgs e)
+        {
+            SymptomsSource.AutoSave();
         }
     }
 }

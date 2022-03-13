@@ -14,5 +14,8 @@ namespace NlpEditor.Resources
         public static ImageSource FemaleImage = new BitmapImage(new Uri("pack://application:,,,/Resources/icon-female.png"));
         public static ImageSource FindImage = new BitmapImage(new Uri("pack://application:,,,/Resources/icon-search.png"));
         public static ImageSource CloseImage = new BitmapImage(new Uri("pack://application:,,,/Resources/close.png"));
+        public static Brush InactiveColor = new SolidColorBrush(Color.FromRgb(255, 0, 0));
+        public static Brush ActiveColor = new SolidColorBrush(Color.FromRgb(0, 0, 255));
+        public static Brush DraftColor = new SolidColorBrush(Color.FromRgb(210, 210, 210));
     }
 }

@@ -66,5 +66,9 @@ namespace NlpEditor.View
         {
             
         }
+        private void Close_OnClick(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
     }
 }

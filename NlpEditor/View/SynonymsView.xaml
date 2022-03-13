@@ -5,27 +5,119 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NlpEditor.View"
         mc:Ignorable="d"
-        Title="SynonymsView" Height="450" Width="540">
-    <Grid>
-        <ScrollViewer Margin="10,96,10,10" Name="ScrollViewer1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" CanContentScroll="True">
-            <ItemsControl ItemsSource="{Binding Synonyms}" x:Name="tStack"  Background="#FFCECECE" >
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <StackPanel x:Name="SynonymsPanel" CanVerticallyScroll="True" Orientation="Vertical"  CanHorizontallyScroll="True"/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <TextBox IsReadOnly="True" Text="{Binding Name}"/>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
+        Title="Список синонимов" Height="450" Width="540">
+    <Window.Resources>
+        <Style TargetType="Button" >
+            <Setter Property="BorderBrush" Value="#A65F00"/>
+            <Setter Property="Background" Value="#BF8230"/>
+            <Setter Property="Foreground" Value="#090974"></Setter>
+            <Style.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="5" />
+                </Style>
+            </Style.Resources>
+        </Style>
+        <Style TargetType="MenuItem" >
+            <Setter Property="BorderBrush" Value="#A65F00"/>
+            <Setter Property="Background" Value="#BF8230"/>
+            <Setter Property="Foreground" Value="#090974"></Setter>
+            <Style.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="5" />
+                </Style>
+            </Style.Resources>
+        </Style>
+        <Style TargetType="Menu">
+            <Setter Property="Background" Value="#FFE5A856" ></Setter>
+        </Style>
+        <Style TargetType="TextBox" >
+            <Style.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="5" />
+                </Style>
+            </Style.Resources>
+        </Style>
+        <Style TargetType="TreeView" >
+            <Style.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="5" />
+                    <Setter Property="Background" Value="#FFEBF5FF" />
+                </Style>
+            </Style.Resources>
+        </Style>
+        <Style TargetType="ListBox" >
+            <Setter Property="BorderBrush" Value="SaddleBrown"></Setter>
+            <Setter Property="Background" Value="#FFEBF5FF"></Setter>
+            <Style.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="5" />
+                </Style>
+
+            </Style.Resources>
+        </Style>
+        <Style TargetType="TextBlock" x:Key="TextBlockMain">
+            <Setter Property="Foreground" Value="#090974"></Setter>
+        </Style>
+        <Style TargetType="TextBlock" x:Key="TextBlockLists">
+            <Setter Property="Foreground" Value="Black"></Setter>
+        </Style>
+        <Style TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#090974"></Setter>
+        </Style>
+        <Style x:Key="AdditionalGrids" TargetType="Grid" >
+            <Style.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="BorderBrush" Value="SaddleBrown"/>
+                    <Setter Property="BorderThickness" Value="1"></Setter>
+                    <Setter Property="Background" Value="#FFAD40"/>
+                    <Setter Property="CornerRadius" Value="5" />
+                </Style>
+            </Style.Resources>
+        </Style>
+        <Style x:Key="ListGrids" TargetType="Grid" >
+
+            <Style.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="Background" Value="#FFA3CFF7"/>
+                    <Setter Property="CornerRadius" Value="5" />
+                </Style>
+            </Style.Resources>
+        </Style>
+        <Style TargetType="ScrollViewer" >
+
+            <Style.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="BorderBrush" Value="SaddleBrown"/>
+                    <Setter Property="BorderThickness" Value="1"></Setter>
+                    <Setter Property="Background" Value="#FFEBF5FF"></Setter>
+                    <Setter Property="CornerRadius" Value="5" />
+                </Style>
+            </Style.Resources>
+        </Style>
+    </Window.Resources>
+    <Grid Background="#FFC373">
+        <ScrollViewer Visibility="Visible" Margin="10,98,10,10" Name="ScrollViewer1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" CanContentScroll="True">
+            <Border>
+                <ItemsControl ItemsSource="{Binding Synonyms}" x:Name="tStack"  >
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel x:Name="SynonymsPanel" CanVerticallyScroll="True" Orientation="Vertical"  CanHorizontallyScroll="True"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <TextBox IsReadOnly="True" Text="{Binding Name}"/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </Border>
         </ScrollViewer>
-        <Grid Margin="10,10,10,0" Background="#FF3D9EDC" Height="86" VerticalAlignment="Top">
+        <Grid Style="{StaticResource AdditionalGrids}" Margin="10,10,10,0"  Height="86" VerticalAlignment="Top">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="250*"/>
                 <ColumnDefinition Width="250*"/>
             </Grid.ColumnDefinitions>
+            <Border Grid.ColumnSpan="2" Margin="0,0,0,0"/>
             <TextBox IsReadOnly="True" Margin="52,6,17,0" TextWrapping="Wrap" Text="{Binding Code}" VerticalAlignment="Top"/>
             <TextBox IsReadOnly="True" Margin="61,6,5,0" TextWrapping="Wrap" Text="{Binding Value}" VerticalAlignment="Top" Grid.Column="1"/>
             <TextBox IsReadOnly="True" Grid.ColumnSpan="2" Margin="5,27,5,0" Text="{Binding Name}" TextWrapping="Wrap" Height="38" VerticalAlignment="Top" />

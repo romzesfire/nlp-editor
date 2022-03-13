@@ -103,9 +103,10 @@ namespace NlpEditor.ViewModel
                 foreach (var symptom in duplicate.SymptomsReference)
                 {
                     var symptomView = _mainViewModel.GetSymptomsByArea(symptom.Area)
-                        .First(s => s.Code == CodesConverter.CodingToShort(symptom.Code)
-                                    && ((s.Value == null && symptom.Value == null) ||
-                                        s.Value == CodesConverter.CodingToShort(symptom.Value)));
+                        .First(s => (
+                            ((s.Code == null && symptom.Code == null) || s.Code == CodesConverter.CodingToShort(symptom.Code))
+                            
+                            && ((s.Value == null && symptom.Value == null) || s.Value == CodesConverter.CodingToShort(symptom.Value))));
 
                     symptomsView.Add(symptomView);
                 }

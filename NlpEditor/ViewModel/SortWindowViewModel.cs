@@ -14,9 +14,22 @@ namespace NlpEditor.ViewModel
     {
         private ObservableCollection<SymptomViewModel> _symptoms;
         private ObservableCollection<SymptomViewModel> _symptomsView;
+        private ObservableCollection<SynonymViewModel> _synonyms;
         private ImageSource _findImage;
         private bool _searchEnabled;
-        public ObservableCollection<SynonymViewModel> Synonyms { get; set; }
+
+        public ObservableCollection<SynonymViewModel> Synonyms
+        {
+            get
+            {
+                return _synonyms;
+            }
+            set
+            {
+                _synonyms = value;
+                OnPropertyChanged();
+            }
+        }
         public SymptomViewModel SymptomReference { get; set; }
         public bool SearchEnabled
         {
@@ -101,15 +114,19 @@ namespace NlpEditor.ViewModel
                 PropertyChanged(this, new PropertyChangedEventArgs(prop));
         }
 
+        public void RemoveSynonym(SynonymViewModel synonym)
+        {
+            Synonyms.Remove(Synonyms.FirstOrDefault(s => s.Name == synonym.Name));
+        }
         public void FindSymptoms(string pattern)
         {
             if (Symptoms != null)
             {
                 SymptomsView = new ObservableCollection<SymptomViewModel>(Symptoms.Where(s => s.Name.Contains(pattern)
-                    || (s.Code != null && s.Code.Contains(pattern))
-                    || (s.Value != null && s.Value.Contains(pattern))
+                    || (s.Code != null && s.Code.ToLower().Contains(pattern.ToLower()))
+                    || (s.Value != null && s.Value.ToLower().Contains(pattern.ToLower()))
                     || s.Synonyms.FirstOrDefault(syn =>
-                            syn.Name.Contains(pattern)) != null));
+                            syn.Name.ToLower().Contains(pattern.ToLower())) != null));
             }
         }
     }

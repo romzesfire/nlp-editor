@@ -76,12 +76,6 @@ namespace NlpEditor.Model
                 Status = Status.Draft;
             }
         }
-
-        public override bool Equals(object? obj)
-        {
-            var second = (Symptom) obj;
-            return Code == second.Code && Value == second.Value;
-        }
     }
     [Serializable]
     public class Symptoms : IEnumerable<Symptom>

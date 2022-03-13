@@ -18,6 +18,7 @@ namespace NlpEditor.ViewModel
         private string _value;
         private string _name;
         private IDuplicateChecker _checker;
+        public bool IsCanceled { get; set; }
         public string Area { get; set; }
         public string Code
         {
