@@ -125,6 +125,8 @@ namespace NlpEditor.ViewModel
                 SymptomsView = new ObservableCollection<SymptomViewModel>(Symptoms.Where(s => s.Name.Contains(pattern)
                     || (s.Code != null && s.Code.ToLower().Contains(pattern.ToLower()))
                     || (s.Value != null && s.Value.ToLower().Contains(pattern.ToLower()))
+                    || s.SelectedGender.ToString().ToLower() == pattern.ToLower()
+                    || s.SelectedStatus.ToString().ToLower() == pattern.ToLower()
                     || s.Synonyms.FirstOrDefault(syn =>
                             syn.Name.ToLower().Contains(pattern.ToLower())) != null));
             }
