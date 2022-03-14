@@ -21,12 +21,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_2C54C42AE54647FCBE87E7365ABC5847"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_2EADE469F0EB45DBAC02FBC8C46AADF3"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -46,6 +40,12 @@
         "Entry"
         {
         "MsmKey" = "8:_9282A1E2267C4706B7F173E910C27ADB"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_E25D6CB85FBA4A2F8B811A96EEC8FEF4"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -223,7 +223,7 @@
             "{1525181F-901A-416C-8A58-119130FE478E}:_15927F5A74874CD68722311959EF2AE2"
             {
             "Name" = "8:#1916"
-            "AlwaysCreate" = "11:FALSE"
+            "AlwaysCreate" = "11:TRUE"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Property" = "8:DesktopFolder"
@@ -246,7 +246,7 @@
             "{1525181F-901A-416C-8A58-119130FE478E}:_AB8AC0CBCBE74F449BB53735E764C33A"
             {
             "Name" = "8:#1919"
-            "AlwaysCreate" = "11:FALSE"
+            "AlwaysCreate" = "11:TRUE"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Property" = "8:ProgramMenuFolder"
@@ -271,7 +271,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Редактор NLP"
         "ProductCode" = "8:{1976F064-0A5A-40E4-A5BA-48F8C67AECBC}"
-        "PackageCode" = "8:{E89E4EC3-0826-4163-9F27-3CE162B37C65}"
+        "PackageCode" = "8:{63FD4882-2741-4E1F-A50C-9DB465D47A4E}"
         "UpgradeCode" = "8:{A212BEF3-6164-41B3-A027-661E2D90BA71}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -391,7 +391,7 @@
         }
         "Shortcut"
         {
-            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_58CAD94C021949938FAC48E29A7EA651"
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_162B98AFACF04F108D14E4EA805D24AD"
             {
             "Name" = "8:Редактор NLP"
             "Arguments" = "8:"
@@ -399,13 +399,13 @@
             "ShowCmd" = "3:1"
             "IconIndex" = "3:0"
             "Transitive" = "11:FALSE"
-            "Target" = "8:_15927F5A74874CD68722311959EF2AE2"
+            "Target" = "8:_E25D6CB85FBA4A2F8B811A96EEC8FEF4"
             "Folder" = "8:_15927F5A74874CD68722311959EF2AE2"
-            "WorkingFolder" = "8:_15927F5A74874CD68722311959EF2AE2"
-            "Icon" = "8:"
+            "WorkingFolder" = "8:_43064E313C5541D788CD0E349DBD84BF"
+            "Icon" = "8:_8973031741CE455891312364CE7B9F6E"
             "Feature" = "8:"
             }
-            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_D1D0B739B6064912AF85EFBCB2F8A11D"
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_FC567BA1BFAA4987AEB7F1B7299C2ACA"
             {
             "Name" = "8:Редактор NLP"
             "Arguments" = "8:"
@@ -413,10 +413,10 @@
             "ShowCmd" = "3:1"
             "IconIndex" = "3:0"
             "Transitive" = "11:FALSE"
-            "Target" = "8:_AB8AC0CBCBE74F449BB53735E764C33A"
+            "Target" = "8:_E25D6CB85FBA4A2F8B811A96EEC8FEF4"
             "Folder" = "8:_AB8AC0CBCBE74F449BB53735E764C33A"
-            "WorkingFolder" = "8:_AB8AC0CBCBE74F449BB53735E764C33A"
-            "Icon" = "8:"
+            "WorkingFolder" = "8:_43064E313C5541D788CD0E349DBD84BF"
+            "Icon" = "8:_8973031741CE455891312364CE7B9F6E"
             "Feature" = "8:"
             }
         }
@@ -818,7 +818,7 @@
         }
         "ProjectOutput"
         {
-            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_2C54C42AE54647FCBE87E7365ABC5847"
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_E25D6CB85FBA4A2F8B811A96EEC8FEF4"
             {
             "SourcePath" = "8:..\\NlpEditor\\obj\\Debug\\net6.0-windows\\apphost.exe"
             "TargetName" = "8:"
