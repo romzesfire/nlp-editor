@@ -14,8 +14,16 @@ namespace NlpEditor.Utils
     {
         public void Load(string sourcePath)
         {
-            var symptoms = JsonConvert.DeserializeObject<Symptoms>(File.ReadAllText(sourcePath));
-            SymptomsSource.Symptoms = symptoms;
+            try
+            {
+                var symptoms = JsonConvert.DeserializeObject<Symptoms>(File.ReadAllText(sourcePath));
+                SymptomsSource.Symptoms = symptoms;
+            }
+            catch (Exception e)
+            {
+                SymptomsSource.Symptoms = null;
+            }
+            
         }
     }
 }
