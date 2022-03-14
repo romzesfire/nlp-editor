@@ -9,12 +9,9 @@
 
     <Window.Resources>
 
-
-
-        <!-- SimpleStyles: ComboBoxItem -->
         <Style x:Key="{x:Type ComboBoxItem}" TargetType="{x:Type ComboBoxItem}">
             <Setter Property="SnapsToDevicePixels" Value="true"/>
-            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Foreground" Value="#FFEBF5FF"/>
             <Setter Property="OverridesDefaultStyle" Value="true"/>
             <Setter Property="Template">
                 <Setter.Value>
@@ -26,10 +23,10 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsHighlighted" Value="true">
-                                <Setter TargetName="Border" Property="Background" Value="#FF4F4F4F"/>
+                                <Setter TargetName="Border" Property="Background" Value="#BF8230"/>
                             </Trigger>
                             <Trigger Property="IsEnabled" Value="false">
-                                <Setter Property="Foreground" Value="#888888"/>
+                                <Setter Property="Foreground" Value="#090974"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -135,29 +132,27 @@
         <ListBox x:Name="SymptomsToSelectList" Margin="210,101,0,10" ItemsSource="{Binding SymptomsToSelect, Mode=TwoWay}" HorizontalContentAlignment="Left" HorizontalAlignment="Left" Width="217">
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <Grid Style="{StaticResource ListGrids}" Name="SymptomGrid" MouseDown="SymptomGrid_OnMouseDown" Tag="{Binding}" Width="188" MaxWidth="{Binding ElementName=SymptomsToSelectList, Path=Width}" MouseLeftButtonDown="Symptom_OnMouseLeftButtonDown" Height="120" >
-                        <Border>
-                            <Ellipse Fill="{Binding SelectedStatusColor}" HorizontalAlignment="Left" Height="10" StrokeThickness="0" Margin="3,3,0,0" Stroke="Black" VerticalAlignment="Top" Width="10">
-
-                            </Ellipse>
+            <Grid Style="{StaticResource ListGrids}" Name="SymptomGrid" MouseDown="SymptomGrid_OnMouseDown" Tag="{Binding}" Width="188" MaxWidth="{Binding ElementName=SymptomsToSelectList, Path=Width}" MouseLeftButtonDown="Symptom_OnMouseLeftButtonDown" Height="120" >
+                <Border>
+                    <TextBox HorizontalAlignment="Left" Height="15" Margin="120,13,0,0" FontSize="11" TextWrapping="Wrap" Text="{Binding Synonyms.Count, Mode = OneWay}" VerticalAlignment="Top" Width="44"/>
 
 
-                        </Border>
-                        <Image Margin="126,0,38,93" Source="{Binding GenderImage, Mode=TwoWay}" Height="24" Width="24" VerticalAlignment="Bottom"/>
-                        <TextBlock Style="{StaticResource TextBlockLists}" TextWrapping="Wrap" FontSize="10"  Text="Код" Margin="10,0,0,90" HorizontalAlignment="Left" Height="15" VerticalAlignment="Bottom" />
-                        <TextBlock Style="{StaticResource TextBlockLists}" TextWrapping="Wrap" FontSize="10"  Text="Значение" Margin="10,0,0,62" HorizontalAlignment="Left" Height="15" VerticalAlignment="Bottom" />
-                        <TextBox IsReadOnly="True" AcceptsReturn="True" AcceptsTab="True" Name="SymptomCode" TextWrapping="Wrap" Text="{Binding Code}"  FontSize="10" VerticalContentAlignment="Center" Margin="10,0,10,76" Height="14" VerticalAlignment="Bottom"/>
-                        <Button ToolTip="Удалить" Tag="{Binding}" Click="RemoveSymptom_OnClick" FontSize="8" Content="X" FontFamily="Arial Black" Background="#FF5259C1" BorderBrush="#FF002CB5" HorizontalAlignment="Right" Width="16" Height="16" VerticalAlignment="Top" >
-                            <Button.Resources>
-                                <Style TargetType="Border">
-                                    <Setter Property="CornerRadius" Value="5"/>
-                                </Style>
-                            </Button.Resources>
-                        </Button>
-                        <TextBox IsReadOnly="True" AcceptsReturn="True" AcceptsTab="True" Name="SymptomValue" TextWrapping="Wrap" Text="{Binding Value}" FontSize="10" VerticalContentAlignment="Center" Margin="10,0,10,49" Height="14" VerticalAlignment="Bottom"/>
-                        <TextBox IsReadOnly="True" AcceptsReturn="True" AcceptsTab="True" Name="SymptomName" TextWrapping="WrapWithOverflow" Text="{Binding Name}" Margin="10,0,10,5" Height="41" VerticalAlignment="Bottom" />
-                    </Grid>
-                </DataTemplate>
+                </Border>
+                <Image Margin="35,0,129,93" Source="{Binding GenderImage, Mode=TwoWay}" Height="24" Width="24" VerticalAlignment="Bottom"/>
+                <TextBlock Style="{StaticResource TextBlockLists}" TextWrapping="Wrap" FontSize="10"  Text="Код" Margin="10,0,0,90" HorizontalAlignment="Left" Height="15" VerticalAlignment="Bottom" />
+                <TextBlock Style="{StaticResource TextBlockLists}" TextWrapping="Wrap" FontSize="10"  Text="Значение" Margin="10,0,0,62" HorizontalAlignment="Left" Height="15" VerticalAlignment="Bottom" />
+                <TextBox IsReadOnly="True" AcceptsReturn="True" AcceptsTab="True" Name="SymptomCode" TextWrapping="Wrap" Text="{Binding Code}"  FontSize="10" VerticalContentAlignment="Center" Margin="10,0,10,76" Height="14" VerticalAlignment="Bottom"/>
+                <Button ToolTip="Удалить" Tag="{Binding}" Click="RemoveSymptom_OnClick" FontSize="8" Content="X" FontFamily="Arial Black" Background="#FF5259C1" BorderBrush="#FF002CB5" HorizontalAlignment="Right" Width="16" Height="16" VerticalAlignment="Top" >
+                    <Button.Resources>
+                        <Style TargetType="Border">
+                            <Setter Property="CornerRadius" Value="5"/>
+                        </Style>
+                    </Button.Resources>
+                </Button>
+                <TextBox IsReadOnly="True" AcceptsReturn="True" AcceptsTab="True" Name="SymptomValue" TextWrapping="Wrap" Text="{Binding Value}" FontSize="10" VerticalContentAlignment="Center" Margin="10,0,10,49" Height="14" VerticalAlignment="Bottom"/>
+                <TextBox IsReadOnly="True" AcceptsReturn="True" AcceptsTab="True" Name="SymptomName" TextWrapping="WrapWithOverflow" Text="{Binding Name}" Margin="10,0,10,5" Height="41" VerticalAlignment="Bottom" />
+            </Grid>
+            </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
         <Grid Style="{StaticResource AdditionalGrids}"  Margin="430,43,10,0" Tag="{Binding SelectedSymptom}" Height="56" VerticalAlignment="Top">
