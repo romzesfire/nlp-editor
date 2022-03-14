@@ -125,7 +125,7 @@ namespace NlpEditor.ViewModel
         {
             source.Remove(symptom.SymptomReference);
             var collectionSymptom = _symptomList[symptom.SymptomReference.Area];
-            if (SelectedArea == "All")
+            if (SelectedArea == "All" || (SearchEnabled && SymptomsToSelect != null))
                 SymptomsToSelect.Remove(symptom);
             
             collectionSymptom.Remove(collectionSymptom.First(s => s.Id == symptom.Id));
@@ -179,9 +179,47 @@ namespace NlpEditor.ViewModel
                                                     || (s.Value != null && s.Value.ToLower().Contains(pattern.ToLower()))
                                                     || s.SelectedGender.ToString().ToLower() == pattern.ToLower()
                                                     || s.SelectedStatus.ToString().ToLower() == pattern.ToLower()
+                                                    || IsCountFind(pattern, s.Synonyms)
                                                     || s.Synonyms.FirstOrDefault(syn =>
                                                         syn.Name.ToLower().Contains(pattern.ToLower())) != null));
             }
+        }
+
+        private bool IsCountFind(string line, IEnumerable<SynonymViewModel> synonyms)
+        {
+            line = line.ToLower();
+            if (line.Contains("count"))
+            {
+                if (line.Contains(">"))
+                {
+                    line = line.Replace(" >", ">").Replace("> ", ">").Replace("count>", "");
+                    var result = int.TryParse(line, out var count);
+                    if (result)
+                    {
+                        return synonyms.Count() > count;
+                    }
+                }
+                else if (line.Contains("="))
+                {
+                    line = line.Replace(" =", "=").Replace("= ", "=").Replace("count=", ""); 
+                    var result = int.TryParse(line, out var count);
+                    if (result)
+                    {
+                        return synonyms.Count() == count;
+                    }
+                }
+                else if (line.Contains("<"))
+                {
+                    line = line.Replace(" <", "<").Replace("< ", "<").Replace("count<", "");
+                    var result = int.TryParse(line, out var count);
+                    if (result)
+                    {
+                        return synonyms.Count() < count;
+                    }
+                }
+            }
+
+            return false;
         }
 
         public void AddSymptomToArea(SymptomViewModel symptom, string area)
