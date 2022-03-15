@@ -37,7 +37,7 @@ namespace NlpEditor
     {
         public MainWindowViewModel ViewModel { get; set; }
         private IDuplicateChecker _checker;
-
+        public FileInfo File;
         public MainWindow()
         {
             InitializeComponent();
@@ -51,9 +51,9 @@ namespace NlpEditor
             _checker = Services.GetService<IDuplicateChecker>();
             ViewModel = new MainWindowViewModel();
             DataContext = ViewModel;
+
+
         }
-
-
 
         private void StatusSelector_OnSelected(object sender, RoutedEventArgs e)
         {
@@ -632,7 +632,7 @@ namespace NlpEditor
 
         private void AutoSaveLoad_OnClick(object sender, RoutedEventArgs e)
         {
-            if (File.Exists(Services.Configuration.General.AutoSaveFileName))
+            if (System.IO.File.Exists(Services.Configuration.General.AutoSaveFileName))
                 OpenNlpSymptoms(Services.Configuration.General.AutoSaveFileName);
             else
                 MessageBox.Show("Файл автосохранения не найден!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);

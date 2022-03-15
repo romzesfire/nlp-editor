@@ -134,10 +134,8 @@
                 <DataTemplate>
                     <Grid Style="{StaticResource ListGrids}" Name="SymptomGrid" MouseDown="SymptomGrid_OnMouseDown" Tag="{Binding}" Width="188" MaxWidth="{Binding ElementName=SymptomsToSelectList, Path=Width}" MouseLeftButtonDown="Symptom_OnMouseLeftButtonDown" Height="120" >
                         <Border>
-
-
-
                         </Border>
+                        <Ellipse Margin="3,3,0,0" Fill="{Binding SelectedStatusColor}" Height="10" VerticalAlignment="Top" HorizontalAlignment="Left" Width="10"></Ellipse>
                         <TextBox IsReadOnly="True" Background="DeepSkyBlue" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Padding="0" HorizontalAlignment="Left" Height="15" Margin="120,13,0,0" FontSize="10" TextWrapping="Wrap" Text="{Binding Synonyms.Count, Mode = OneWay}" VerticalAlignment="Top" Width="40"/>
                         <Image Margin="35,0,129,93" Source="{Binding GenderImage, Mode=TwoWay}" Height="24" Width="24" VerticalAlignment="Bottom"/>
                         <TextBlock Style="{StaticResource TextBlockLists}" TextWrapping="Wrap" FontSize="10"  Text="Код" Margin="10,0,0,90" HorizontalAlignment="Left" Height="15" VerticalAlignment="Bottom" />
@@ -240,14 +238,15 @@
 
 
             </Border>
-            <Button Click="AddSymptom_OnClick"  Content="+" Margin="0,52,0,0" Height="18" FontFamily="Arial Black" VerticalAlignment="Top" HorizontalAlignment="Center" Width="211"/>
+            <Button Click="AddSymptom_OnClick"  Content="Добавить симптом" Margin="0,50,0,0" Height="20"  VerticalAlignment="Top" HorizontalAlignment="Center" Width="211"/>
 
-            <TextBox x:Name="FindTextField" Margin="3,0,29,0" TextWrapping="Wrap" FontSize="9" Height="27" VerticalAlignment="Center"/>
-            <Button  Margin="190,0,3,0" Click="Find_Click" Height="23" VerticalAlignment="Center">
+            <TextBox x:Name="FindTextField" Margin="3,20,29,0" TextWrapping="Wrap" FontSize="9" Height="27" VerticalAlignment="Top"/>
+            <Button  Margin="190,0,3,28" Click="Find_Click" Height="23" VerticalAlignment="Bottom">
                 <Image Source="{Binding FindImage}"></Image>
             </Button>
             <TextBlock TextWrapping="Wrap" Text="Модель" FontSize="11" Margin="4,3,166,54"/>
-            <TextBox Background="#FFC373" HorizontalAlignment="Left" BorderBrush="SaddleBrown" Height="15" Margin="47,3,0,0" TextWrapping="Wrap" FontSize="10" Text="{Binding SelectedArea}" VerticalAlignment="Top" Width="165"/>
+            <TextBox Background="#FFC373" HorizontalAlignment="Left" BorderBrush="SaddleBrown" HorizontalContentAlignment="Center" Height="15" Margin="47,3,0,0" FontSize="10" IsReadOnly="True" Text="{Binding SelectedArea}" VerticalAlignment="Top" Width="129"/>
+            <TextBox Background="#FFC373" HorizontalAlignment="Left" HorizontalContentAlignment="Center" BorderBrush="SaddleBrown" Height="15" Margin="178,3,0,0" FontSize="10" IsReadOnly="True" Text="{Binding SymptomsToSelect.Count, Mode=OneWay}" VerticalAlignment="Top" Width="36"/>
         </Grid>
 
 
