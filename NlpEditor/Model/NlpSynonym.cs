@@ -22,7 +22,7 @@ namespace NlpEditor.Model
         public long CodeNode { get; set; }
         [JsonProperty("code_2", NullValueHandling = NullValueHandling.Ignore)]
         public long? CodeValue { get; set; }
-        [JsonProperty("gender", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonProperty("gender", NullValueHandling = NullValueHandling.Include)]
         public string Gender { get; set; }
         [JsonProperty("status")]
         public string Status { get; set; }

@@ -27,7 +27,7 @@ namespace NlpEditor.Utils
                         CodeValue = symptom.Value == null ? null : long.Parse(symptom.Value.Code),
                         Name = symptom.Name,
                         Designation = synonym.Name,
-                        Gender = symptom.Gender.ToString().ToLower() == "none" ? null : symptom.Gender.ToString().ToLower(),
+                        Gender = symptom.Gender.ToString().ToLower() == "none" ? "" : symptom.Gender.ToString().ToLower(),
                         Status = symptom.Status.ToString().ToLower()
                     });
                 }
