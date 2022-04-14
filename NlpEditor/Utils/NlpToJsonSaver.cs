@@ -17,6 +17,17 @@ namespace NlpEditor.Utils
             var synonyms = new List<NlpSynonym>();
             foreach (var symptom in symptomsToSave)
             {
+                synonyms.Add(new NlpSynonym()
+                {
+                    CodeNode = long.Parse(symptom.Code.Code),
+                    CodeSystemNode = CodesConverter.ConvertToShortCodeSystem(symptom.Code.CodeSystemUrl),
+                    CodeSystemValue = symptom.Value == null ? null : CodesConverter.ConvertToShortCodeSystem(symptom.Value.CodeSystemUrl),
+                    CodeValue = symptom.Value == null ? null : long.Parse(symptom.Value.Code),
+                    Name = symptom.Name,
+                    Designation = symptom.Name,
+                    Gender = symptom.Gender.ToString().ToLower() == "none" ? null : symptom.Gender.ToString().ToLower(),
+                    Status = symptom.Status.ToString().ToLower()
+                });
                 foreach (var synonym in symptom.Synonyms)
                 {
                     synonyms.Add(new NlpSynonym()
@@ -27,7 +38,7 @@ namespace NlpEditor.Utils
                         CodeValue = symptom.Value == null ? null : long.Parse(symptom.Value.Code),
                         Name = symptom.Name,
                         Designation = synonym.Name,
-                        Gender = symptom.Gender.ToString().ToLower() == "none" ? "" : symptom.Gender.ToString().ToLower(),
+                        Gender = symptom.Gender.ToString().ToLower() == "none" ? null : symptom.Gender.ToString().ToLower(),
                         Status = symptom.Status.ToString().ToLower()
                     });
                 }

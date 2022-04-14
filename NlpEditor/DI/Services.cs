@@ -21,6 +21,7 @@ namespace NlpEditor.DI
             _services = new ServiceCollection()
                 .AddSingleton<INlpFileLoader, NlpFileFromExcelLoader>()
                 .AddSingleton<INlpFileLoader, NlpFromNlpsLoader>()
+                .AddSingleton<INlpFileLoader, NlpFromJsonLoader>()
                 .AddSingleton<INetworkProvider, NetworksProvider>()
                 .AddSingleton<IDuplicateChecker, DuplicateChecker>()
                 .AddSingleton<INlpSaver, NlpToExcelSaver>()

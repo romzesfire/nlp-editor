@@ -86,7 +86,7 @@ namespace NlpEditor
         private void OpenFile_OnClick(object sender, RoutedEventArgs e)
         {
             OpenFileDialog dialog = new OpenFileDialog();
-            dialog.Filter = "xlsx files (*.xlsx)|*.xlsx|nlps file (*.nlps)|*.nlps";
+            dialog.Filter = "xlsx files (*.xlsx)|*.xlsx|nlps file (*.nlps)|*.nlps|json file (*.json)|*.json";
             dialog.Title = "Выберите файл с симптомами NLP";
 
             if (dialog.ShowDialog() == false)
@@ -97,8 +97,28 @@ namespace NlpEditor
         public void OpenNlpSymptoms(string fileName)
         {
             var loaders = Services.GetServices<INlpFileLoader>();
-            INlpFileLoader loader =
-                fileName.EndsWith("xlsx") ? loaders.OfType<NlpFileFromExcelLoader>().First() : loaders.OfType<NlpFromNlpsLoader>().First();
+            INlpFileLoader loader = new NlpFromJsonLoader();
+            if (fileName.EndsWith("xlsx"))
+            {
+                loader = loaders.OfType<NlpFileFromExcelLoader>().First();
+            }
+            else if (fileName.EndsWith("nlps"))
+            {
+                loader = loaders.OfType<NlpFromNlpsLoader>().First();
+            }
+            else if (fileName.EndsWith("json"))
+            {
+                loader = loaders.OfType<NlpFromJsonLoader>().First();
+                var jsonLoader = (NlpFromJsonLoader) loader;
+                OpenFileDialog opener = new OpenFileDialog();
+                opener.Filter = "nlps file (*.nlps)|*.nlps|xlsx file (*.xlsx)|*.xlsx";
+                opener.Title = "Выберите референсный файл для сортировки по областям";
+                if(opener.ShowDialog() == false)
+                    return;
+
+                jsonLoader.SetHeadersPath(opener.FileName);
+            }
+            else return;
 
             loader.Load(fileName);
             if (SymptomsSource.Symptoms == null)
