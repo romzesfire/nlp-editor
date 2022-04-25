@@ -232,6 +232,10 @@
                 <MenuItem Click="AutoSetStatuses_OnClick" x:Name="AutoSetStatuses" Header="Авторазметка статусов"/>
                 <MenuItem Click="AutoSetDesignations_OnClick" x:Name="AutoSetDesignations" Header="Авторазметка переводов"/>
             </MenuItem>
+            <MenuItem Margin="1" Header="Выгрузить">
+                <MenuItem VerticalContentAlignment="Center" x:Name="SaveHelzySearch" Click="SaveHelzySearch_Click" Header="helzy-search-vs"/>
+                
+            </MenuItem>
         </Menu>
         <Grid Style="{StaticResource AdditionalGrids}" HorizontalAlignment="Left" Height="73" Margin="210,26,0,0" VerticalAlignment="Top" Width="217" >
             <Border Margin="0,0,0,0" >

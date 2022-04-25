@@ -662,5 +662,18 @@ namespace NlpEditor
         {
             SymptomsSource.AutoSave();
         }
+
+        private void SaveHelzySearch_Click(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog saver = new SaveFileDialog();
+            saver.Filter = "xlsx file|*.xlsx";
+
+            if (saver.ShowDialog() == false)
+                return;
+
+            var saverHsVs = new HelzySearchSaver();
+
+            saverHsVs.Save(saver.FileName, SymptomsSource.Symptoms);
+        }
     }
 }
