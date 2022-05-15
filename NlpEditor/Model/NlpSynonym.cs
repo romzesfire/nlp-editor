@@ -14,23 +14,31 @@ namespace NlpEditor.Model
     {
         [JsonProperty("name")]
         public string Name { get; set; }
+
+        [JsonProperty("category")]
+        public string Category { get; set; }
+
         [JsonProperty("designation")]
         public string Designation { get; set; }
+
         [JsonProperty("observation_code_system")]
         public string CodeSystemNode { get; set; }
 
-        [JsonProperty("value_code_system", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonProperty("value_code_system", NullValueHandling = NullValueHandling.Include)]
         public string CodeSystemValue { get; set; }
 
         [JsonProperty("observation_code")]
         public long CodeNode { get; set; }
 
-        [JsonProperty("value_code", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonProperty("value_code", NullValueHandling = NullValueHandling.Include)]
         public long? CodeValue { get; set; }
+
         [JsonProperty("gender", NullValueHandling = NullValueHandling.Include)]
         public string Gender { get; set; }
+
         [JsonProperty("status")]
         public string Status { get; set; }
+
         public NlpSynonym()
         {
 
@@ -45,9 +53,11 @@ namespace NlpEditor.Model
         public Coding? CodeValue { get; set; }
         public Gender Gender { get; set; }
         public Status Status { get; set; }
+        public string Category { get; set; }
         public CodingNlpSynonym(NlpSynonym synonym)
         {
             Name = synonym.Name;
+            Category = synonym.Category;
             Designation = synonym.Designation;
             CodeNode = CodesConverter.ShortToCoding(synonym.CodeSystemNode + synonym.CodeNode);
             CodeValue = synonym.CodeSystemValue == null || synonym.CodeSystemValue == "" ? null : CodesConverter.ShortToCoding(synonym.CodeSystemValue + synonym.CodeValue);

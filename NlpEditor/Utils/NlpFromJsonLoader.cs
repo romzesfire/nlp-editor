@@ -27,10 +27,10 @@ namespace NlpEditor.Utils
         public void Load(string sourcePath)
         {
             var nlpSynonyms = JsonConvert.DeserializeObject<List<NlpSynonym>>(File.ReadAllText(sourcePath)).Select(s=> new CodingNlpSynonym(s));
-            var symptoms = GetMapperSymptoms();
+            //var symptoms = GetMapperSymptoms();
             
-            if(symptoms == null)
-                return;
+            //if(symptoms == null)
+            //    return;
 
             foreach (var synonym in nlpSynonyms)
             {
@@ -39,8 +39,8 @@ namespace NlpEditor.Utils
                 
                 if (symptom == null)
                 {
-                    var mapperSymptom = symptoms.FirstOrDefault(s =>
-                         s.Code == synonym.CodeNode && s.Value == synonym.CodeValue);
+                    //var mapperSymptom = symptoms.FirstOrDefault(s =>
+                    //     s.Code == synonym.CodeNode && s.Value == synonym.CodeValue);
 
                     var symptomNew = (new Symptom()
                     {
@@ -49,7 +49,8 @@ namespace NlpEditor.Utils
                         Name = synonym.Name,
                         Gender = synonym.Gender,
                         Status = synonym.Status,
-                        Area = mapperSymptom == null ? "New" : mapperSymptom.Area,
+                        //Area = mapperSymptom == null ? "New" : mapperSymptom.Area,
+                        Area = synonym.Category
                     });
                     symptomNew.Synonyms.Add(new Synonym(synonym.Designation));
                     _symptoms.AddSymptom(symptomNew);

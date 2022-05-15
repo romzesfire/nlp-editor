@@ -25,6 +25,7 @@ namespace NlpEditor.Utils
                     CodeValue = symptom.Value == null ? null : long.Parse(symptom.Value.Code),
                     Name = symptom.Name,
                     Designation = symptom.Name,
+                    Category = symptom.Area,
                     Gender = symptom.Gender.ToString().ToLower() == "none" ? null : symptom.Gender.ToString().ToLower(),
                     Status = symptom.Status.ToString().ToLower()
                 });
@@ -37,6 +38,7 @@ namespace NlpEditor.Utils
                         CodeSystemValue = symptom.Value == null ? null : CodesConverter.ConvertToShortCodeSystem(symptom.Value.CodeSystemUrl),
                         CodeValue = symptom.Value == null ? null : long.Parse(symptom.Value.Code),
                         Name = symptom.Name,
+                        Category = symptom.Area,
                         Designation = synonym.Name,
                         Gender = symptom.Gender.ToString().ToLower() == "none" ? null : symptom.Gender.ToString().ToLower(),
                         Status = symptom.Status.ToString().ToLower()

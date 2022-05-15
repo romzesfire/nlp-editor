@@ -109,14 +109,6 @@ namespace NlpEditor
             else if (fileName.EndsWith("json"))
             {
                 loader = loaders.OfType<NlpFromJsonLoader>().First();
-                var jsonLoader = (NlpFromJsonLoader) loader;
-                OpenFileDialog opener = new OpenFileDialog();
-                opener.Filter = "nlps file (*.nlps)|*.nlps|xlsx file (*.xlsx)|*.xlsx";
-                opener.Title = "Выберите референсный файл для сортировки по областям";
-                if(opener.ShowDialog() == false)
-                    return;
-
-                jsonLoader.SetHeadersPath(opener.FileName);
             }
             else return;
 
