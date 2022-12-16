@@ -35,7 +35,7 @@ namespace NlpEditor.Utils
                 {
                     var area = sheet.Name;
                     
-                    for (int col = _config.StartIndexColumn; col < 500; col++)
+                    for (int col = _config.StartIndexColumn; col < 2000; col++)
                     {
                         if (sheet.Cells[_config.PriorNameRowIndex, col].Value == null &&
                             sheet.Cells[_config.PriorNameRowIndex, col + 1].Value == null)
